@@ -8,6 +8,7 @@ const { Header, Content, Sider } = Layout;
 
 class App extends Component {
   state = {
+    collapsed: false,
     results: [
       {
         ID: uuid.v4(),
@@ -87,6 +88,12 @@ class App extends Component {
     ]
   };
 
+
+  onCollapse = collapsed => {
+    console.log(collapsed);
+    this.setState({ collapsed });
+  };
+
   render() {
     return (
       <div className="App">
@@ -117,3 +124,5 @@ class App extends Component {
     );
   }
 }
+
+export default App;
