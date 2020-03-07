@@ -1,6 +1,5 @@
 import requests
 import json
-import scholarly
 from bs4 import BeautifulSoup
 
 def google(query, page):
