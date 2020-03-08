@@ -6,6 +6,67 @@ const { Paragraph } = Typography;
 
 export class Paper extends Component {
   render() {
+    let abstractRender;
+
+    if (this.props.results.abstract) {
+      abstractRender = (
+        <Descriptions.Item
+          span={6}
+          bordered={true}
+          label="Abstract"
+          style={{ abstractStyle }}
+        >
+          {this.props.results.abstract.replace(
+            /(([^\s]+\s\s*){150})(.*)/,
+            "$1…"
+          )}
+        </Descriptions.Item>
+      );
+    } else {
+      abstractRender = (
+        <Descriptions.Item
+          span={6}
+          bordered={true}
+          label="Abstract"
+          style={{ abstractStyle }}
+        >
+          Abstract not found. Visit the full paper for more details.
+        </Descriptions.Item>
+      );
+    }
+
+    let journalRender;
+
+    if (this.props.results.journal) {
+      journalRender = (
+        <Descriptions.Item label="Journal">
+          {this.props.results.journal}
+        </Descriptions.Item>
+      );
+    } else {
+      journalRender = (
+        <Descriptions.Item label="Journal">
+          Publication journal not found.
+        </Descriptions.Item>
+      );
+    }
+
+    let keywordRender;
+
+    if (this.props.results.keywords) {
+      keywordRender = (
+        <Descriptions.Item label="Keywords">
+          {this.props.results.keywords.join(", ")}
+        </Descriptions.Item>
+      );
+    } else {
+      keywordRender = (
+        <Descriptions.Item label="Keywords">
+          Keywords not found
+        </Descriptions.Item>
+      );
+    }
+
     return (
       <div className="PaperHeader" style={paperStyle}>
         <PageHeader
@@ -35,19 +96,7 @@ export class Paper extends Component {
             </Button>
           ]}
         >
-          <Descriptions size="default">
-            <Descriptions.Item
-              span={6}
-              bordered={true}
-              label="Abstract"
-              style={{ abstractStyle }}
-            >
-              {this.props.results.abstract.replace(
-                /(([^\s]+\s\s*){150})(.*)/,
-                "$1…"
-              )}
-            </Descriptions.Item>
-          </Descriptions>
+          <Descriptions size="default">{abstractRender}</Descriptions>
           <Descriptions column={3}>
             <Descriptions.Item label="Date">
               {this.props.results.pubDate.month}-
@@ -56,15 +105,9 @@ export class Paper extends Component {
             <Descriptions.Item label="Database">
               {this.props.results.database}
             </Descriptions.Item>
-            <Descriptions.Item label="Journal">
-              {this.props.results.journal}
-            </Descriptions.Item>
+            {journalRender}
           </Descriptions>
-          <Descriptions column={1}>
-            <Descriptions.Item label="Keywords">
-              {this.props.results.keywords.join(", ")}
-            </Descriptions.Item>
-          </Descriptions>
+          <Descriptions column={1}>{keywordRender}</Descriptions>
         </PageHeader>
       </div>
     );
