@@ -6,6 +6,7 @@ import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
 import Search from "./components/Search";
 import { search_api } from "./components/DataFunctions";
+import Bookmarks from "./components/bookmarks/Bookmarks";
 
 const { Header, Content, Sider } = Layout;
 
@@ -13,7 +14,9 @@ class App extends Component {
   state = {
     collapsed: false,
     searchTerm: "",
-    results: []
+    results: [],
+    bookmarks: [
+    ]
   };
 
   onCollapse = collapsed => {
@@ -36,6 +39,21 @@ class App extends Component {
       });
   };
 
+  addBookmark = tempBookmark => {
+    this.setState({ bookmarks: [...this.state.bookmarks, tempBookmark] });
+  };
+
+  delBookmark = bookmarkTitle => {
+    console.log("result", bookmarkTitle)
+    this.setState({
+      bookmarks: [
+        ...this.state.bookmarks.filter(
+          bookmark => bookmark !== bookmarkTitle
+        )
+      ]
+    });
+  };
+
   render() {
     return (
       <div className="App">
@@ -49,19 +67,24 @@ class App extends Component {
             >
               <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
                 <Menu.Item key="1">
-                  <span>Case 1</span>
-                </Menu.Item>
-                <Menu.Item key="2">
-                  <span>Case 2</span>
+                  <span>Bookmarked Papers</span>
                 </Menu.Item>
               </Menu>
+              <Bookmarks
+                bookmarks={this.state.bookmarks}
+                style={{ padding: "0%", margin: "0%" }}
+              />
             </Sider>
             <Content>
               <div>
                 <Search setSearch={this.setSearch} />
               </div>
               <div>
-                <ResultList results={this.state.results} />
+                <ResultList
+                  results={this.state.results}
+                  addBookmark={this.addBookmark}
+                  delBookmark={this.delBookmark}
+                />
               </div>
             </Content>
           </Layout>
