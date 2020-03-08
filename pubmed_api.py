@@ -61,18 +61,24 @@ def pubmed(query, number):
             authorName = author['Initials'] + ". " + author['LastName']
             authors.append(authorName)
         except:
-            for author in article['MedlineCitation']['Article']['AuthorList']['Author']:
-                try:
-                    authorName = author['Initials'] + ". " + author['LastName']
-                    authors.append(authorName)
-                except:
-                    pass
+            try:
+                for author in article['MedlineCitation']['Article']['AuthorList']['Author']:
+                    try:
+                        authorName = author['Initials'] + ". " + author['LastName']
+                        authors.append(authorName)
+                    except:
+                        pass
+            except:
+                pass
         
         #getting year published
         pubYear = ""
         pubMonth = ""
         pubDay = ""
-        pubYear = article['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate']['Year']
+        try:
+            pubYear = article['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate']['Year']
+        except:
+            pubYear = "n/a"
         try:
             pubMonth = article['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate']['Month']
         except:
