@@ -6,6 +6,7 @@ import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
 import Search from "./components/Search";
 import { search_api } from "./components/DataFunctions";
+import Bookmarks from "./components/bookmarks/Bookmarks";
 
 const { Header, Content, Sider } = Layout;
 
@@ -13,7 +14,65 @@ class App extends Component {
   state = {
     collapsed: false,
     searchTerm: "",
-    results: []
+    results: [],
+    bookmarks: [
+      {
+        ID: uuid.v4(),
+        title: "Paper 1 and some more extra words to make it longer",
+        abstract:
+          "majority of AD cases: Sporadic late onset AD (LOAD). Accumulation of DNA damage is a well-established aging factor. In this regard, a large amount",
+        authors: ["John", "Jill", "Jake"],
+        keywords: ["this", "that"],
+        confidenceInterval: 97,
+        APA: "this is the APA citation",
+        database: "SuperPapers.com",
+        date: Date("3/7/20"),
+        citationNumber: 5010,
+        journal: "myJournal"
+      },
+      {
+        ID: uuid.v4(),
+        title: "Paper 2",
+        abstract:
+          "majority of AD cases: Sporadic late onset AD (LOAD). Accumulation of DNA damage is a well-established aging factor. In this regard, a large amount",
+        authors: ["John", "Jill", "Jake"],
+        keywords: ["this", "that"],
+        confidenceInterval: 97,
+        APA: "this is the APA citation",
+        database: "SuperPapers.com",
+        date: Date("3/7/20"),
+        citationNumber: 5010,
+        journal: "myJournal"
+      },
+      {
+        ID: uuid.v4(),
+        title: "Paper 3",
+        abstract: 
+          "majority of AD cases: Sporadic late onset AD (LOAD). Accumulation of DNA damage is a well-established aging factor. In this regard, a large amount",
+        authors: ["John", "Jill", "Jake"],
+        keywords: ["this", "that"],
+        confidenceInterval: 97,
+        APA: "this is the APA citation",
+        database: "SuperPapers.com",
+        date: Date("3/7/20"),
+        citationNumber: 5010,
+        journal: "myJournal"
+      },
+      {
+        ID: uuid.v4(),
+        title: "Paper 4",
+        abstract:
+          "majority of AD cases: Sporadic late onset AD (LOAD). Accumulation of DNA damage is a well-established aging factor. In this regard, a large amount",
+        authors: ["John", "Jill", "Jake"],
+        keywords: ["this", "that"],
+        confidenceInterval: 97,
+        APA: "this is the APA citation",
+        database: "SuperPapers.com",
+        date: Date("3/7/20"),
+        citationNumber: 5010,
+        journal: "myJournal"
+      }
+    ]
   };
 
   onCollapse = collapsed => {
@@ -49,12 +108,10 @@ class App extends Component {
             >
               <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
                 <Menu.Item key="1">
-                  <span>Case 1</span>
-                </Menu.Item>
-                <Menu.Item key="2">
-                  <span>Case 2</span>
+                  <span>Bookmarked Papers</span>
                 </Menu.Item>
               </Menu>
+              <Bookmarks bookmarks={this.state.bookmarks} style={{padding:"0%", margin: "0%"}}/>
             </Sider>
             <Content>
               <div>

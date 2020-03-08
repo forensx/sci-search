@@ -2,9 +2,27 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { PageHeader, Button, Descriptions, Typography } from "antd";
 import { Row, Col } from "antd";
+import { StarOutlined, StarFilled } from "@ant-design/icons";
+
 const { Paragraph } = Typography;
 
 export class Paper extends Component {
+  state = {
+    bookmarked: false
+  };
+
+  onStarHover = event => {
+    this.setState({ starHover: true });
+  };
+
+  getStyle = (
+      this.state.bookmarked ? <StarFilled/> : <StarOutlined/>
+    )
+
+  bookmarkPaper = (
+    this.state.bookmarked = !this.state.bookmarked
+  )
+
   render() {
     let abstractRender;
 
@@ -53,6 +71,8 @@ export class Paper extends Component {
 
     let keywordRender;
 
+
+
     if (this.props.results.keywords) {
       keywordRender = (
         <Descriptions.Item label="Keywords">
@@ -73,13 +93,23 @@ export class Paper extends Component {
           ghost={false}
           style={pageStyle}
           title={
-            <a
-              href={this.props.results.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {this.props.results.title}
-            </a>
+            <React.Fragment>
+              <a
+                href={this.props.results.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {this.props.results.title}
+              </a>
+
+              <Button
+                type="link"
+                style={{ color: "black" }}
+                onCLick={this.bookmarkPaper}
+              >
+                {this.getStyle}
+              </Button>
+            </React.Fragment>
           }
           subTitle={this.props.results.authors
             .join(", ")
