@@ -1,15 +1,21 @@
 import React, { Component } from "react";
+import "./App.css";
+import ResultList from "./components/results/ResultList";
+import uuid from "uuid";
+import { Layout, Menu } from 'antd';
 import "antd/dist/antd.css";
-import { Layout, Menu } from "antd";
 import Search from "./components/search";
 import { search_api } from "./components/DataFunctions";
+
 const { Header, Content, Sider } = Layout;
 
-export default class App extends Component {
+
+class App extends Component {
   state = {
     collapsed: false,
     searchTerm: ""
   };
+
 
   onCollapse = collapsed => {
     console.log("Sidebar toggled: ", collapsed);
@@ -48,11 +54,11 @@ export default class App extends Component {
               <div>
                 <Search setSearch={this.setSearch} />
               </div>
-              <div>Papers here</div>
+              <div><ResultList results={this.state.results}/></div>
             </Content>
           </Layout>
         </Layout>
       </div>
     );
   }
-}
+export default App;
