@@ -3,6 +3,10 @@ import json
 import xmltodict
 
 def pubmed(query, number):
+    if number == 1:
+        number == 2
+    else:
+        pass
     results = []
     PARAMS_SEARCH = {
         'db': 'pubmed',
