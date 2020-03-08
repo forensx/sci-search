@@ -122,8 +122,5 @@ def pubmed(query, number):
     results = {
         'results': results
     }
-    # with open('pubmed.json', 'w') as f:
-    #     json.dump(results, f)
+    # this does not work with 1
     return results
-
-#pubmed('jean', 20)

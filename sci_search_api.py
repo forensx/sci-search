@@ -14,14 +14,16 @@ class e(Resource):
         search_params = search_param
         page_num = page_number
 
-        pubmed_result = pubmed(search_param, page_num)
-        biorxiv_result = bioarchive(search_param, page_num)
+        pubmed_result = pubmed(search_params, page_num)
+        biorxiv_result = bioarchive(search_params, page_num)
 
+        pubmed_arr = pubmed_result['results']
+        biorxiv_arr = biorxiv_result['results']
+
+        combined = pubmed_arr + biorxiv_arr
         
-        #result = google(search_params, page_num)
-
         # return results of search here
-        return jsonify({'result': result})
+        return jsonify({'results': combined})
 
 if __name__ == '__main__':
     app.run(debug=True)

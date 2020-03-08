@@ -51,10 +51,7 @@ def bioarchive(query, number):
     final = {
         'results': results
     }
-    #return final
+    return final
 
-    with open('bioarchive.json', 'w') as f:
-        json.dump(final, f)
+
     #BIOARCHIVE PUTS A METRIC VALUE FOR EACH PAPER
-
-bioarchive('jean', 10)
