@@ -1,0 +1,6 @@
+
+__pycache__/bioarchive_api.cpython-36.pyc
+__pycache__/google_api.cpython-36.pyc
+__pycache__/medrxiv_api.cpython-36.pyc
+__pycache__/pubmed_api.cpython-36.pyc
+*.json
