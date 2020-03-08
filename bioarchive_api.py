@@ -30,7 +30,7 @@ def bioarchive(query, number):
             'month': month,
             'day': day
         }
-        journal = "n/a"
+        journal = None
         database = "bioRxiv"
         authors = []
         for author in paper['authors']:
