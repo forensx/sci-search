@@ -20,7 +20,7 @@ export class Paper extends Component {
     this.setState({ bookmarked: !this.state.bookmarked });
     console.log("unmarking function!");
     console.log(this.props.results);
-    this.props.delBookmark.bind(this, this.props.results);
+    this.props.delBookmark.bind(this, this.props.results.title);
   }
 
   Mark() {

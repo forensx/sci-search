@@ -9,7 +9,7 @@ export class Bookmark extends Component {
 
     let abstractRender;
 
-    if (this.props.results) {
+    if (this.props.results.abstract) {
       abstractRender = (
         <Descriptions.Item
           span={6}

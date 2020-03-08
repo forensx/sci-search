@@ -43,12 +43,12 @@ class App extends Component {
     this.setState({ bookmarks: [...this.state.bookmarks, tempBookmark] });
   };
 
-  delBookmark = tempBookmark => {
-    console.log("result", tempBookmark)
+  delBookmark = bookmarkTitle => {
+    console.log("result", bookmarkTitle)
     this.setState({
       bookmarks: [
         ...this.state.bookmarks.filter(
-          tempBookmark => tempBookmark.title !== tempBookmark.title
+          bookmark => bookmark !== bookmarkTitle
         )
       ]
     });
