@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { List, Avatar } from "antd";
 import PropTypes from "prop-types";
-import Paper from "./Paper"
+import Paper from "./Paper";
 
 const IconText = ({ icon, text }) => (
   <span>
@@ -13,21 +13,12 @@ const IconText = ({ icon, text }) => (
 export class ResultList extends Component {
   render() {
     return this.props.results.map(result => (
-        <Paper 
-          results={result}
-          key={result.ID}
-        />
-    )
-
-    );
+      <Paper results={result} key={result.ID} />
+    ));
   }
 }
 ResultList.propTypes = {
   results: PropTypes.array.isRequired
 };
 
-
-
 export default ResultList;
-
-
