@@ -12,8 +12,8 @@ export class Paper extends Component {
   };
 
 
-
   render() {
+
     let abstractRender;
     if (this.props.results.abstract) {
       abstractRender = (
@@ -58,24 +58,7 @@ export class Paper extends Component {
       );
     }
 
-
-    
     let keywordRender;
-
-    function BookmarkButton(isBookmarked) {
-      if (!isBookmarked) {
-        return (
-          <Button type="link" ghost onClick={() => this.setState({bookmarked: !this.state.bookmarked})}>
-            <StarFilled />
-          </Button>
-        );
-      } else
-        return (
-          <Button type="link" ghost onClick={() => this.setState({bookmarked: !this.state.bookmarked})}> 
-            <StarOutlined />
-          </Button>
-        );
-    }
 
     if (this.props.results.keywords) {
       keywordRender = (
@@ -91,6 +74,22 @@ export class Paper extends Component {
       );
     }
 
+    let button;
+    if (!this.state.bookmarked) {
+      button = (
+        <Button onClick={() => this.setState({ bookmarked: !this.state.bookmarked })}>
+          <StarFilled />
+        </Button>
+      );
+    } else
+      button = (
+        <Button
+          onClick={() => this.setState({ bookmarked: !this.state.bookmarked })}
+        >
+          <StarOutlined />
+        </Button>
+      );
+
     return (
       <div className="PaperHeader" style={paperStyle}>
         <PageHeader
@@ -105,7 +104,7 @@ export class Paper extends Component {
               >
                 {this.props.results.title}
               </a>
-              <BookmarkButton isBookmarked={this.state.bookmarked} />
+              {button}
             </React.Fragment>
           }
           subTitle={this.props.results.authors
