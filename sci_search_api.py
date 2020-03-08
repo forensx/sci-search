@@ -12,7 +12,7 @@ CORS(app)
 
 
 @api.route('/search/<string:search_param>/<int:numResults>')
-class e(Resource):
+class Search(Resource):
     def get(self, search_param, numResults):
         
         search_params = search_param
