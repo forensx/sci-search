@@ -11,21 +11,21 @@ def pubmed(query, number):
         'sort': 'relevance',
         'term': query,
     }
-    r = requests.get('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi', params = PARAMS_SEARCH)
+    r = requests.get(
+        'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi', params=PARAMS_SEARCH)
     result_json = r.json()
-    
+
     id_list = (result_json['esearchresult']['idlist'])
     if (len(id_list) > 1):
         id_list = ', '.join(id_list)
-
     PARAMS_FETCH = {
-        'db':'pubmed',
-        'retmode':'xml',
-        'id': id_list, 
+        'db': 'pubmed',
+        'retmode': 'xml',
+        'id': id_list,
     }
-    papers = requests.get('http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi', params = PARAMS_FETCH)
-    
-    
+    papers = requests.get(
+        'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi', params=PARAMS_FETCH)
+
     papers_json = xmltodict.parse(papers.text)
     with open('test3.json', 'w') as f:
             json.dump(papers_json, f)
@@ -40,22 +40,18 @@ def pubmed(query, number):
             'day': "",
         }
         abstract = ""
-
-        #getting the Article Title
+        # getting the Article Title
         try:
             title = article['MedlineCitation']['Article']['ArticleTitle']['#text']
         except:
             title = article['MedlineCitation']['Article']['ArticleTitle']
         title = title.strip("[].")
-
-        #getting the journal title
+        # getting the journal title
         journal = article['MedlineCitation']['Article']['Journal']['Title']
-
-        #getting the url
+        # getting the url
         pmid = article['MedlineCitation']['PMID']['#text']
         url = "https://ncbi.nlm.nih.gov/pubmed/" + pmid
-
-        #getting author names
+        # getting author names
         try:
             author = article['MedlineCitation']['Article']['AuthorList']['Author']
             authorName = author['Initials'] + ". " + author['LastName']
@@ -64,14 +60,14 @@ def pubmed(query, number):
             try:
                 for author in article['MedlineCitation']['Article']['AuthorList']['Author']:
                     try:
-                        authorName = author['Initials'] + ". " + author['LastName']
+                        authorName = author['Initials'] + \
+                            ". " + author['LastName']
                         authors.append(authorName)
                     except:
                         pass
             except:
                 pass
-        
-        #getting year published
+        # getting year published
         pubYear = ""
         pubMonth = ""
         pubDay = ""
@@ -92,8 +88,7 @@ def pubmed(query, number):
             'month': pubMonth,
             'day': pubDay,
         }
-
-        #getting abstract
+        # getting abstract
         try:
             abTexts = article['MedlineCitation']['Article']['Abstract']['AbstractText']
         except:
