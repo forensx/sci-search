@@ -15,12 +15,16 @@ export class ResultList extends Component {
     return this.props.results.map(result => (
         <Paper 
           results={result}
+          key={result.ID}
         />
     )
 
     );
   }
 }
+ResultList.propTypes = {
+  results: PropTypes.array.isRequired
+};
 
 
 
