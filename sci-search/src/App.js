@@ -13,7 +13,8 @@ const { Header, Content, Sider } = Layout;
 class App extends Component {
   state = {
     collapsed: false,
-    searchTerm: ""
+    searchTerm: "",
+    results: []
   };
 
 
@@ -27,7 +28,9 @@ class App extends Component {
     this.setState({ searchTerm: search });
 
     // API call from Flask
-    search_api(search);
+    const searchResult = search_api(search);
+    console.log(searchResult);
+    this.setState({results: searchResult});
   };
 
   render() {
@@ -61,4 +64,5 @@ class App extends Component {
       </div>
     );
   }
+}
 export default App;
