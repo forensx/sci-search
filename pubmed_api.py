@@ -78,15 +78,15 @@ def pubmed(query, number):
         try:
             pubYear = article['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate']['Year']
         except:
-            pubYear = "n/a"
+            pubYear = None
         try:
             pubMonth = article['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate']['Month']
         except:
-            pubMonth = "n/a"
+            pubMonth = None
         try:
             pubDay = article['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate']['Day']
         except:
-            pubDay = "n/a"
+            pubDay = None
         pubDate = {
             'year': pubYear,
             'month': pubMonth,
@@ -97,7 +97,7 @@ def pubmed(query, number):
         try:
             abTexts = article['MedlineCitation']['Article']['Abstract']['AbstractText']
         except:
-            abstract = "n/a"
+            abstract = None
         try:
             abstract = ""
             for abText in abTexts:
@@ -113,7 +113,7 @@ def pubmed(query, number):
             abstract = ""
             abstract += abTexts
         except:
-            abstract = "n/a"
+            abstract = None
         
         result = {
             'title': title,

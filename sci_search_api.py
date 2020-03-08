@@ -3,6 +3,7 @@ from flask_restplus import Resource, Api
 from google_api import google
 from pubmed_api import pubmed
 from bioarchive_api import bioarchive
+from medrxiv_api import medrxiv
 import math
 
 app = Flask(__name__)
@@ -18,13 +19,15 @@ class e(Resource):
         pubmed_result = pubmed(search_params, page_num)
         biorxiv_result = bioarchive(search_params, page_num)
         scholar_result = google(search_params, math.ceil(page_num/10))
+        medrxiv_result = medrxiv(search_params, page_num)
 
         pubmed_arr = pubmed_result['results']
         biorxiv_arr = biorxiv_result['results']
         scholar_arr = scholar_result['results']
+        medrxiv_arr = medrxiv_result['results']
 
 
-        combined = pubmed_arr + biorxiv_arr + scholar_arr
+        combined = pubmed_arr + biorxiv_arr + scholar_arr + medrxiv_arr
         
         # return results of search here
         return jsonify({'results': combined})

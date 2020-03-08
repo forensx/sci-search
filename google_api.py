@@ -25,12 +25,12 @@ def google(query, page):
             summaries = entry.find("div", attrs={"class": "gs_rs"})
 
 
-            title = "n/a"
-            url = "n/a"
-            date = "n/a"
-            journal = "n/a"
-            abstract = "n/a"
-            authors = ['n/a']
+            title = None
+            url = None
+            date = None
+            journal = None
+            abstract = None
+            authors = [""]
             database = "Google Scholar"
 
             try:
@@ -73,10 +73,10 @@ def google(query, page):
                 'url': url,
                 'pubDate':{
                     'year':date,
-                    'month':'n/a',
-                    'day':'n/a',
+                    'month':None,
+                    'day':None,
                 },
-                'journal':'n/a',
+                'journal':None,
                 'abstract':abstract,
                 'authors':authors,
                 'database':'Google Scholar',
@@ -86,8 +86,4 @@ def google(query, page):
         'results': results
     }
 
-    # with open('googleapi.json', 'w') as f:
-    #     json.dump(results, f)
-
     return results
-google('gene', 5)
