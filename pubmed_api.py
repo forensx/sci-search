@@ -32,7 +32,7 @@ def pubmed(query, number):
     for article in papers_json['PubmedArticleSet']['PubmedArticle']:
         title = ""
         journal = ""
-        ulr = ""
+        url = ""
         authors = []
         pubDate = {
             'year': "",
@@ -122,6 +122,5 @@ def pubmed(query, number):
     results = {
         'results': results
     }
+    # this does not work with 1
     return results
-
-
