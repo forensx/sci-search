@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
-import "antd/dist/antd.css";
 import ResultList from "./components/results/ResultList";
 import uuid from "uuid";
 import { Layout, Menu } from 'antd';
+import "antd/dist/antd.css";
+
 const { Header, Content, Sider } = Layout;
+
 
 class App extends Component {
   state = {
@@ -116,7 +118,7 @@ class App extends Component {
             </Sider>
             <Content>
               <div>Search here</div>
-              <div><ResultList/></div>
+              <div><ResultList results={this.state.results}/></div>
             </Content>
           </Layout>
         </Layout>
