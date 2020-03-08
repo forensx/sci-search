@@ -41,7 +41,7 @@ class App extends Component {
       <div className="App">
         <Layout>
           <Header style={{ color: "white" }}>Sci Search</Header>
-          <Layout style={{ minHeight: "100vh" }}>
+          <Layout style={{ minHeight: "90vh" }}>
             <Sider
               collapsible
               collapsed={this.state.collapsed}

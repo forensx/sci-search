@@ -5,9 +5,8 @@ import { PageHeader, Button, Descriptions, Row, Col } from "antd";
 export class Paper extends Component {
   render() {
     return (
-      <div style={paperStyle}>
+      <div className="PaperHeader" style={paperStyle}>
         <PageHeader
-          style={{ maxHeight: "400px" }}
           ghost={false}
           title={
             <a
@@ -15,7 +14,6 @@ export class Paper extends Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {" "}
               {this.props.results.title}
             </a>
           }
@@ -27,14 +25,13 @@ export class Paper extends Component {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {" "}
-                View Paper{" "}
+                View Paper
               </a>
             </Button>
           ]}
         >
           <Descriptions size="small" column={3}>
-            <Descriptions.Item label="Abstract" style={{ minWidth: "50%" }}>
+            <Descriptions.Item label="Abstract" style={{ abstractStyle }}>
               {this.props.results.abstract}
             </Descriptions.Item>
             <br></br>
@@ -44,7 +41,9 @@ export class Paper extends Component {
             </Descriptions.Item>
             <br></br>
             <Descriptions.Item label="Date">
-              {this.props.results.date}
+              {this.props.results.pubDate.month}-
+              {this.props.results.pubDate.day}-
+              {this.props.results.pubDate.year}
             </Descriptions.Item>
           </Descriptions>
         </PageHeader>
@@ -61,7 +60,9 @@ Paper.propTypes = {
 
 const paperStyle = {
   backgroundColor: "#f5f5f5",
-  padding: "0.5% 5% 0.5% 3%"
+  padding: "0.5% 5% 0.5% 2%"
 };
 
-const abstractStyle = {};
+const abstractStyle = {
+  minWidth: "400px"
+};
