@@ -16,6 +16,7 @@ export class ResultList extends Component {
         <Paper 
           results={result}
           key={result.ID}
+          className="paperDiv"
         />
     )
 

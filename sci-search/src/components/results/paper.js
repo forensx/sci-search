@@ -8,11 +8,11 @@ export class Paper extends Component {
       <div style={paperStyle}>
         <PageHeader
           ghost={false}
-          title={this.props.results.title}
+          title={<a href={this.props.results.url} target="_blank" rel="noopener noreferrer" > {this.props.results.title}</a>}
           subTitle={this.props.results.authors}
           extra={[
             <Button key="1" type="primary">
-              Primary
+              <a href={this.props.results.url} target="_blank" rel="noopener noreferrer" > View Paper </a>
             </Button>
           ]}
         >
