@@ -1,16 +1,27 @@
 import React, { Component } from "react";
 import "antd/dist/antd.css";
-import { Layout, Menu } from 'antd';
+import { Layout, Menu } from "antd";
+import Search from "./components/search";
+import { search_api } from "./components/DataFunctions";
 const { Header, Content, Sider } = Layout;
 
 export default class App extends Component {
   state = {
-    collapsed: false
+    collapsed: false,
+    searchTerm: ""
   };
 
   onCollapse = collapsed => {
-    console.log(collapsed);
+    console.log("Sidebar toggled: ", collapsed);
     this.setState({ collapsed });
+  };
+
+  setSearch = search => {
+    console.log("User searched (setting in App): ", search);
+    this.setState({ searchTerm: search });
+
+    // API call from Flask
+    search_api(search);
   };
 
   render() {
@@ -34,7 +45,9 @@ export default class App extends Component {
               </Menu>
             </Sider>
             <Content>
-              <div>Search here</div>
+              <div>
+                <Search setSearch={this.setSearch} />
+              </div>
               <div>Papers here</div>
             </Content>
           </Layout>
