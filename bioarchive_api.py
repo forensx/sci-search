@@ -7,9 +7,10 @@ def bioarchive(query, number):
     results = []
 
     PARAMS = {
-        'q': query.replace(" ", "%252B"),
+        'q': query,
         'page_size': number,
-        'timeframe': 'alltime'
+        'timeframe': 'alltime',
+        'metric': 'downloads',
     }
 
     r = requests.get('https://api.rxivist.org/v1/papers', params = PARAMS)
