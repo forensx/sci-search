@@ -1,5 +1,6 @@
 import requests
 import json
+import datetime
 
 def bioarchive(query, number):
     
@@ -18,6 +19,17 @@ def bioarchive(query, number):
         url = paper['biorxiv_url']
         abstract = paper['abstract']
         date = paper['first_posted']
+        date = datetime.datetime.strptime(date, '%Y-%m-%d')
+        date = date.strftime('%b %d %Y')
+        date = date.split()
+        month = date[0]
+        day = date[1]
+        year = date[2]
+        pubDate = {
+            'year': year,
+            'month': month,
+            'day': day
+        }
         journal = "n/a"
         database = "bioRxiv"
         authors = []
@@ -28,17 +40,21 @@ def bioarchive(query, number):
         result = {
             'title': title,
             'url': url,
-            'pubDate': date,
+            'pubDate': pubDate,
             'journal': journal,
             'abstract': abstract,
             'authors': authors,
-            'database': database
+            'database': database,
         }
         results.append(result)
     
     final = {
         'results': results
     }
-    return final
+    #return final
 
+    with open('bioarchive.json', 'w') as f:
+        json.dump(final, f)
     #BIOARCHIVE PUTS A METRIC VALUE FOR EACH PAPER
+
+bioarchive('jean', 10)
