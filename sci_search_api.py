@@ -19,7 +19,7 @@ class e(Resource):
         pubmed_result = pubmed(search_params, page_num)
         biorxiv_result = bioarchive(search_params, page_num)
         scholar_result = google(search_params, math.ceil(page_num/10))
-        medrxiv_result = medrxiv(search_params, page_num)
+        medrxiv_result = medrxiv(search_params, math.ceil(page_num/10))
 
         pubmed_arr = pubmed_result['results']
         biorxiv_arr = biorxiv_result['results']
