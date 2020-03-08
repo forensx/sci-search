@@ -28,8 +28,8 @@ class App extends Component {
     // API call from Flask
     search_api(search)
       .then(response => {
-        console.log("Response: ", response.data);
-        this.setState({ results: response.data });
+        console.log("Response: ", response.data.result);
+        this.setState({ results: response.data.result });
       })
       .catch(err => {
         console.log(err);
