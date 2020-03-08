@@ -10,11 +10,28 @@ export class Paper extends Component {
   state = {
     bookmarked: false
   };
+  constructor(props) {
+    super(props);
+    this.Mark = this.Mark.bind(this);
+    this.unMark = this.unMark.bind(this);
+  }
 
+  unMark() {
+    this.setState({ bookmarked: !this.state.bookmarked });
+    console.log("unmarking function!");
+    console.log(this.props.results);
+    this.props.delBookmark.bind(this, this.props.results);
+  }
+
+  Mark() {
+    this.setState({ bookmarked: !this.state.bookmarked });
+    console.log("marking function!");
+    this.props.addBookmark(this.props.results);
+  }
 
   render() {
-
     let abstractRender;
+
     if (this.props.results.abstract) {
       abstractRender = (
         <Descriptions.Item
@@ -74,21 +91,22 @@ export class Paper extends Component {
       );
     }
 
+
+
     let button;
-    if (!this.state.bookmarked) {
+    if (this.state.bookmarked) {
       button = (
-        <Button onClick={() => this.setState({ bookmarked: !this.state.bookmarked })}>
+        <Button type="link" onClick={this.unMark}>
           <StarFilled />
         </Button>
       );
-    } else
+    } else {
       button = (
-        <Button
-          onClick={() => this.setState({ bookmarked: !this.state.bookmarked })}
-        >
+        <Button type="link" onClick={this.Mark}>
           <StarOutlined />
         </Button>
       );
+    }
 
     return (
       <div className="PaperHeader" style={paperStyle}>

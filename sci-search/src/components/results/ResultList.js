@@ -16,6 +16,8 @@ export class ResultList extends Component {
         <Paper 
           results={result}
           key={result.ID}
+          addBookmark={this.props.addBookmark}
+          delBookmark={this.props.delBookmark}
         />
     )
 

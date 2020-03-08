@@ -16,62 +16,6 @@ class App extends Component {
     searchTerm: "",
     results: [],
     bookmarks: [
-      {
-        ID: uuid.v4(),
-        title: "Paper 1 and some more extra words to make it longer",
-        abstract:
-          "majority of AD cases: Sporadic late onset AD (LOAD). Accumulation of DNA damage is a well-established aging factor. In this regard, a large amount",
-        authors: ["John", "Jill", "Jake"],
-        keywords: ["this", "that"],
-        confidenceInterval: 97,
-        APA: "this is the APA citation",
-        database: "SuperPapers.com",
-        date: Date("3/7/20"),
-        citationNumber: 5010,
-        journal: "myJournal"
-      },
-      {
-        ID: uuid.v4(),
-        title: "Paper 2",
-        abstract:
-          "majority of AD cases: Sporadic late onset AD (LOAD). Accumulation of DNA damage is a well-established aging factor. In this regard, a large amount",
-        authors: ["John", "Jill", "Jake"],
-        keywords: ["this", "that"],
-        confidenceInterval: 97,
-        APA: "this is the APA citation",
-        database: "SuperPapers.com",
-        date: Date("3/7/20"),
-        citationNumber: 5010,
-        journal: "myJournal"
-      },
-      {
-        ID: uuid.v4(),
-        title: "Paper 3",
-        abstract: 
-          "majority of AD cases: Sporadic late onset AD (LOAD). Accumulation of DNA damage is a well-established aging factor. In this regard, a large amount",
-        authors: ["John", "Jill", "Jake"],
-        keywords: ["this", "that"],
-        confidenceInterval: 97,
-        APA: "this is the APA citation",
-        database: "SuperPapers.com",
-        date: Date("3/7/20"),
-        citationNumber: 5010,
-        journal: "myJournal"
-      },
-      {
-        ID: uuid.v4(),
-        title: "Paper 4",
-        abstract:
-          "majority of AD cases: Sporadic late onset AD (LOAD). Accumulation of DNA damage is a well-established aging factor. In this regard, a large amount",
-        authors: ["John", "Jill", "Jake"],
-        keywords: ["this", "that"],
-        confidenceInterval: 97,
-        APA: "this is the APA citation",
-        database: "SuperPapers.com",
-        date: Date("3/7/20"),
-        citationNumber: 5010,
-        journal: "myJournal"
-      }
     ]
   };
 
@@ -95,6 +39,21 @@ class App extends Component {
       });
   };
 
+  addBookmark = tempBookmark => {
+    this.setState({ bookmarks: [...this.state.bookmarks, tempBookmark] });
+  };
+
+  delBookmark = tempBookmark => {
+    console.log("result", tempBookmark)
+    this.setState({
+      bookmarks: [
+        ...this.state.bookmarks.filter(
+          tempBookmark => tempBookmark.title !== tempBookmark.title
+        )
+      ]
+    });
+  };
+
   render() {
     return (
       <div className="App">
@@ -111,14 +70,21 @@ class App extends Component {
                   <span>Bookmarked Papers</span>
                 </Menu.Item>
               </Menu>
-              <Bookmarks bookmarks={this.state.bookmarks} style={{padding:"0%", margin: "0%"}}/>
+              <Bookmarks
+                bookmarks={this.state.bookmarks}
+                style={{ padding: "0%", margin: "0%" }}
+              />
             </Sider>
             <Content>
               <div>
                 <Search setSearch={this.setSearch} />
               </div>
               <div>
-                <ResultList results={this.state.results} />
+                <ResultList
+                  results={this.state.results}
+                  addBookmark={this.addBookmark}
+                  delBookmark={this.delBookmark}
+                />
               </div>
             </Content>
           </Layout>

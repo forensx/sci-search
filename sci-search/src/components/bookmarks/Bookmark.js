@@ -6,8 +6,10 @@ const { Paragraph } = Typography;
 
 export class Bookmark extends Component {
   render() {
+
     let abstractRender;
-    if (this.props.results.abstract) {
+
+    if (this.props.results) {
       abstractRender = (
         <Descriptions.Item
           span={6}
@@ -15,10 +17,7 @@ export class Bookmark extends Component {
           label="Abstract"
           style={{ abstractStyle }}
         >
-          {this.props.results.abstract.replace(
-            /(([^\s]+\s\s*){15})(.*)/,
-            "$1…"
-          )}
+          {this.props.results.abstract.replace(/(([^\s]+\s\s*){15})(.*)/, "$1…")}
         </Descriptions.Item>
       );
     } else {
@@ -36,6 +35,7 @@ export class Bookmark extends Component {
 
     let journalRender;
 
+
     if (this.props.results.journal) {
       journalRender = (
         <Descriptions.Item label="Journal">
@@ -48,6 +48,21 @@ export class Bookmark extends Component {
           Publication journal not found.
         </Descriptions.Item>
       );
+    }
+
+    let tempURL;
+    if (this.props.bookmark == undefined) {
+      tempURL = "";
+    } else {
+      tempURL = this.props.bookmark.url;
+    }
+
+
+    let tempAuthors;
+    if (this.props.bookmark == undefined) {
+      tempAuthors = [""];
+    } else {
+      tempAuthors = this.props.bookmark.authors;
     }
 
     return (
@@ -67,7 +82,7 @@ export class Bookmark extends Component {
               )}
             </a>
           }
-          subTitle={this.props.results.authors
+          subTitle={tempAuthors
             .join(", ")
             .replace(/(([^\s]+\s\s*){2})(.*)/, "$1et al.")}
         >
