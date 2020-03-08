@@ -4,7 +4,7 @@ import ResultList from "./components/results/ResultList";
 import uuid from "uuid";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
-import Search from "./components/search";
+import Search from "./components/Search";
 import { search_api } from "./components/DataFunctions";
 
 const { Header, Content, Sider } = Layout;
@@ -28,8 +28,8 @@ class App extends Component {
     // API call from Flask
     search_api(search)
       .then(response => {
-        console.log("Response: ", response.data.result);
-        this.setState({ results: response.data.result });
+        console.log("Response: ", response.data.results);
+        this.setState({ results: response.data.results });
       })
       .catch(err => {
         console.log(err);
