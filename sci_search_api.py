@@ -9,6 +9,8 @@ import json
 from rake_nltk import Rake
 import re
 import numpy as np
+import requests
+
 
 # Uses stopwords for english from NLTK, and all puntuation characters.
 #r = Rake(min_length=2, max_length=6)
@@ -24,20 +26,23 @@ class e(Resource):
         pubmed_result = pubmed(search_params, page_num)
         biorxiv_result = bioarchive(search_params, page_num)
         scholar_result = google(search_params, math.ceil(page_num/10))
-        medrxiv_result = medrxiv(search_params, math.ceil(page_num/10))
+        #medrxiv_result = medrxiv(search_params, math.ceil(page_num/10)) #TAKES TOO LONG
 
         pubmed_arr = pubmed_result['results']
         biorxiv_arr = biorxiv_result['results']
         scholar_arr = scholar_result['results']
-        medrxiv_arr = medrxiv_result['results']
-        combined = pubmed_arr + biorxiv_arr + scholar_arr + medrxiv_arr
+        #medrxiv_arr = medrxiv_result['results']
+        combined = pubmed_arr + biorxiv_arr + scholar_arr #+ medrxiv_arr
 
         for i in range(len(combined)):
             text = combined[i]['abstract']
             
             if (text is None):
+                combined[i]['keywords'] = None
+                combined[i]['genes'] = None
+                combined[i]['gdc'] = None
+                combined[i]['pfc'] = None
                 continue
-            print(text)
             # r.extract_keywords_from_text(text)
             # # To get keyword phrases ranked highest to lowest.
             # keywords_extracted = r.get_ranked_phrases()[0:4]
@@ -49,7 +54,56 @@ class e(Resource):
             counts = genes.count
             genes_unique = sorted(np.unique(genes), key=counts)[::-1]
 
+            gene = ",".join(genes_unique)
             combined[i]['genes'] = genes_unique
+
+            #gene-disease count
+            gdc = 0
+
+            #protein function count
+            pfc = 0
+
+            PARAMS = {
+                'format': 'json',
+                'limit': 100
+            }
+
+            r = requests.get('https://www.disgenet.org/api/gda/gene/' + gene, params = PARAMS)
+            s = requests.get('https://www.disgenet.org/api/vda/variant/'+ gene, params = PARAMS)
+
+            try:
+                for disease in r.json():
+                    diseaseNames = [x for x in disease['disease_name'].split(" ") if len(x) > 3]
+                    for diseaseName in diseaseNames:
+                        if (diseaseName in text):
+                            gdc += 1
+                            continue
+                    
+                    proteinName = disease['protein_class_name']
+                    if proteinName in text:
+                        pfc += 1
+            except:
+                #No gene-disease assoc. found
+                pass
+            
+            try:
+                for variantdisease in s.json():
+                    variantdiseaseNames = [x for x in variantdisease['disease_name'].split(" ") if len(x) > 3]
+
+                    for diseaseName in variantdiseaseNames:
+                        if (diseaseName in abstract):
+                            gdc += 1
+                            continue
+
+                    proteinName = variantdisease['protein_class_name']
+                    if proteinName in text:
+                        pfc += 1
+            except:
+                #No variant-disease assoc. found
+                pass
+            combined[i]['gdc'] = gdc
+            combined[i]['pfc'] = pfc
+
         # return results of search here
         return jsonify({'results': combined})
 
