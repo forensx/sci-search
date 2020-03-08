@@ -5,7 +5,6 @@ import { Row, Col } from "antd";
 const { Paragraph } = Typography;
 
 export class Paper extends Component {
-
   journalCapitalizationCase = journalName => {
     var splitStr = journalName.toLowerCase().split(" ");
     for (var i = 0; i < splitStr.length; i++) {
@@ -16,7 +15,7 @@ export class Paper extends Component {
     }
     // Directly return the joined string
     return splitStr.join(" ");
-  }
+  };
 
   render() {
     let abstractRender;
@@ -85,7 +84,9 @@ export class Paper extends Component {
     if (this.props.results.genes) {
       geneListRender = (
         <Descriptions.Item label="Genes">
-          {this.props.results.genes.join(", ")}
+          {this.props.results.genes.map(gene => (
+            <Button size="small" key={gene}>{gene}</Button>
+          ))}
         </Descriptions.Item>
       );
     } else {
