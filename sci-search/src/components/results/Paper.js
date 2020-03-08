@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { PageHeader, Button, Descriptions, Typography } from "antd";
+import { PageHeader, Button, Descriptions, Typography, Alert } from "antd";
 import { Row, Col } from "antd";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 
@@ -11,21 +11,10 @@ export class Paper extends Component {
     bookmarked: false
   };
 
-  onStarHover = event => {
-    this.setState({ starHover: true });
-  };
 
-  getStyle = (
-      this.state.bookmarked ? <StarFilled/> : <StarOutlined/>
-    )
-
-  bookmarkPaper = (
-    this.state.bookmarked = !this.state.bookmarked
-  )
 
   render() {
     let abstractRender;
-
     if (this.props.results.abstract) {
       abstractRender = (
         <Descriptions.Item
@@ -69,9 +58,24 @@ export class Paper extends Component {
       );
     }
 
+
+    
     let keywordRender;
 
-
+    function BookmarkButton(isBookmarked) {
+      if (!isBookmarked) {
+        return (
+          <Button type="link" ghost onClick={() => this.setState({bookmarked: !this.state.bookmarked})}>
+            <StarFilled />
+          </Button>
+        );
+      } else
+        return (
+          <Button type="link" ghost onClick={() => this.setState({bookmarked: !this.state.bookmarked})}> 
+            <StarOutlined />
+          </Button>
+        );
+    }
 
     if (this.props.results.keywords) {
       keywordRender = (
@@ -101,14 +105,7 @@ export class Paper extends Component {
               >
                 {this.props.results.title}
               </a>
-
-              <Button
-                type="link"
-                style={{ color: "black" }}
-                onCLick={this.bookmarkPaper}
-              >
-                {this.getStyle}
-              </Button>
+              <BookmarkButton isBookmarked={this.state.bookmarked} />
             </React.Fragment>
           }
           subTitle={this.props.results.authors
