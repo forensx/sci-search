@@ -85,7 +85,9 @@ export class Paper extends Component {
       geneListRender = (
         <Descriptions.Item label="Genes">
           {this.props.results.genes.map(gene => (
-            <Button size="small" key={gene}>{gene}</Button>
+            <Button size="small" key={gene}>
+              {gene}
+            </Button>
           ))}
         </Descriptions.Item>
       );
@@ -101,15 +103,15 @@ export class Paper extends Component {
       console.log("UTC null");
       if (this.props.results.pubDate.year === null) {
         dateRender = (
-          <Descriptions.Item label="Date">Date not complete</Descriptions.Item>
+          <Descriptions.Item label="Date">Date not available</Descriptions.Item>
         );
       } else if (this.props.results.pubDate.month === null) {
         dateRender = (
-          <Descriptions.Item label="Date">Date not complete</Descriptions.Item>
+          <Descriptions.Item label="Date">Date not available</Descriptions.Item>
         );
       } else if (this.props.results.pubDate.day === null) {
         dateRender = (
-          <Descriptions.Item label="Date">Date not complete</Descriptions.Item>
+          <Descriptions.Item label="Date">Date not available</Descriptions.Item>
         );
       }
     } else {
@@ -166,8 +168,13 @@ export class Paper extends Component {
             </Descriptions.Item>
             {journalRender}
           </Descriptions>
-          <Descriptions column={2}>{keywordRender}</Descriptions>
+          <Descriptions column={2}><i>{keywordRender}</i></Descriptions>
           <Descriptions column={2}>{geneListRender}</Descriptions>
+          <Descriptions column={1}>
+            <Descriptions.Item label="Paper Priority Index">
+              <b>{this.props.results.ppindex}</b>
+            </Descriptions.Item>
+          </Descriptions>
         </PageHeader>
       </div>
     );

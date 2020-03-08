@@ -40,7 +40,7 @@ class App extends Component {
     return (
       <div className="App">
         <Layout>
-          <Header style={{ color: "white" }}>Sci Search</Header>
+          <Header style={{ color: "white", fontSize: "26px" }}>Sci-Search</Header>
           <Layout style={{ minHeight: "90vh" }}>
             <Sider
               collapsible

@@ -10,13 +10,15 @@ const IconText = ({ icon, text }) => (
   </span>
 );
 
-export class ResultList extends Component {
+class ResultList extends Component {
   render() {
-    return this.props.results.map(result => (
+    let paperList = this.props.results.sort((a, b) => (a.ppindex > b.ppindex ? -1 : 1));
+    return paperList.map(result => (
       <Paper results={result} key={result.ID} />
     ));
   }
 }
+
 ResultList.propTypes = {
   results: PropTypes.array.isRequired
 };
