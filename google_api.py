@@ -13,7 +13,6 @@ def google(query, page):
     r = requests.get('https://scholar.google.com/scholar?hl=en', params = PARAMS)
 
     content = r.text
-    print(content)
     page = BeautifulSoup(content, 'lxml')
     for entry in page.find_all("h3", attrs={"class": "gs_rt"}):
         try:
