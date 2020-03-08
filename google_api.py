@@ -2,6 +2,7 @@ import requests
 import json
 import scholarly
 from bs4 import BeautifulSoup
+import re
 
 def google(query, page):
     results = []
@@ -16,20 +17,71 @@ def google(query, page):
     content = r.text
     page = BeautifulSoup(content, 'lxml')
     books = 0
-    for entry in page.find_all("h3", attrs={"class": "gs_rt"}):
+    for entry in page.find_all("div", attrs={"class": "gs_ri"}):
+        titleSection = entry.find("h3", attrs={"class": "gs_rt"})
+        subSection = entry.find("div", attrs={"class": "gs_a"})
+        summaries = entry.find("div", attrs={"class": "gs_rs"})
+
+
+        title = "n/a"
+        url = "n/a"
+        pubDate = "n/a"
+        journal = "n/a"
+        abstract = "n/a"
+        authors = ['n/a']
+        database = "Google Scholar"
+
         try:
-            book = entry.find("span", attrs={"class": "gs_ctc"}).contents[0].text
-            if (book.equals("[BOOK]")):
+            book = titleSection.find("span", attrs={"class": "gs_ctc"}).contents[0].text
+            if (book == "[BOOK]"):
                 books +=1
                 continue
-            
         except:
             pass
+
         try:
-            results.append({"title": entry.a.text, "url": entry.a['href']})
+            title = titleSection.a.text
+            url = titleSection.a['href']
         except:
             pass
     
-    print(books)
+        try:
+            contents = subSection.contents[0]
+            date = re.findall(r'\b\d+\b', contents)
+            print(date)
+            contents = contents.split('-')
+            author = contents[0]
+            author = author.split(', ')
+            authors = []
+            for e in author:
+                if e != '':
+                    e = e.strip("…\xa0")
+                    authors.append(e)
+                else:
+                    pass
+        except:
+            pass
 
-google("jean", 3)
+        try:
+            abstract = summaries.text
+        except:
+            pass
+        result = {
+            'title': title,
+            'url': url,
+            'pubDate':{
+                'year':date[0],
+                'month':'n/a',
+                'day':'n/a',
+            },
+            'journal':'n/a',
+            'abstract':abstract,
+            'authors':authors,
+            'database':'Google Scholar',
+        }
+        results.append(result)
+    results = {
+        'results': results
+    }
+
+    return results
