@@ -4,9 +4,14 @@ from google_api import google
 from pubmed_api import pubmed
 from bioarchive_api import bioarchive
 import math
+import json
+from rake_nltk import Rake
 
+# Uses stopwords for english from NLTK, and all puntuation characters.
+r = Rake(min_length=2, max_length=6)
 app = Flask(__name__)
 api = Api(app)
+
 
 @api.route('/search/<string:search_param>/<int:numResults>')
 class e(Resource):
@@ -21,6 +26,15 @@ class e(Resource):
         scholar_arr = scholar_result['results']
         # combined = pubmed_arr + biorxiv_arr + scholar_arr
         combined = biorxiv_arr + scholar_arr
+
+        for i in range(len(combined)):
+            text = combined[i]['abstract']
+            r.extract_keywords_from_text(text)
+            # To get keyword phrases ranked highest to lowest.
+            keywords_extracted = r.get_ranked_phrases()[0:4]
+
+            combined[i]['keywords'] = keywords_extracted
+
         # return results of search here
         return jsonify({'results': combined})
 

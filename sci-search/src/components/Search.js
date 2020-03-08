@@ -5,7 +5,7 @@ const { Search } = Input;
 export default class search extends Component {
   render() {
     return (
-      <div className="search-container" style={{ padding: "2%" }}>
+      <div className="search-container" style={{ padding: "2.5% 1.5% 3% 2%" }}>
         <Search
           placeholder="Enter a search term here"
           enterButton="Search"
