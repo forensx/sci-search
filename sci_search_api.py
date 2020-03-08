@@ -10,6 +10,7 @@ from rake_nltk import Rake
 import requests
 import datetime
 import re
+from statistics import mean 
 import numpy as np
 
 # Uses stopwords for english from NLTK, and all puntuation characters.
@@ -17,10 +18,20 @@ a = Rake(min_length=2, max_length=6)
 app = Flask(__name__)
 api = Api(app)
 
+def PP_Index(gdc, pfc, years_passed):
+    
+    num = (gdc * 6) + (pfc * 5)
+    den = (years_passed/2020)
+    index_calculated = num/den
+
+    return index_calculated
+
+
 
 @api.route('/search/<string:search_param>/<int:numResults>')
 class e(Resource):
     def get(self, search_param, numResults):
+        ppindex_all = []
         search_params = search_param
         page_num = numResults
         pubmed_result = pubmed(search_params, page_num)
@@ -120,7 +131,22 @@ class e(Resource):
                 combined[i]['UTCDatetime'] = utcDatetime
             except:
                 combined[i]['UTCDatetime'] = None
-        # return results of search here
+
+            #pp index
+            gdc = combined[i]['gdc']
+            gfc = combined[i]['pfc']
+            try:
+                yearsPassed = 2020 - combined[i]['pubDate']['year']
+            except:
+                yearsPassed = 1000
+            ppindex = PP_Index(gdc, gfc, yearsPassed)
+            ppindex_all.append(ppindex)
+            
+        norm_ppindex = [x/mean(ppindex_all) for x in ppindex_all]
+        #  \ return results of search here
+
+        for i in range(len(combined)):
+            combined[i]['ppindex'] = norm_ppindex[i]
         return jsonify({'results': combined})
 
 if __name__ == "__main__":
