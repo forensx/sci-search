@@ -8,12 +8,12 @@ import math
 app = Flask(__name__)
 api = Api(app)
 
-@api.route('/search/<string:search_param>/<int:page_number>')
+@api.route('/search/<string:search_param>/<int:numResults>')
 class e(Resource):
-    def get(self, search_param, page_number):
+    def get(self, search_param, numResults):
         
         search_params = search_param
-        page_num = page_number
+        page_num = numResults
 
         pubmed_result = pubmed(search_params, page_num)
         biorxiv_result = bioarchive(search_params, page_num)
