@@ -20,12 +20,11 @@ class App extends Component {
   };
 
   onCollapse = collapsed => {
-    console.log("Sidebar toggled: ", collapsed);
     this.setState({ collapsed });
   };
 
   setSearch = search => {
-    console.log("User searched (setting in App): ", search);
+    console.log("User searched: ", search);
     this.setState({ searchTerm: search });
 
     // API call from Flask
@@ -33,6 +32,14 @@ class App extends Component {
       .then(response => {
         console.log("Response: ", response.data.results);
         this.setState({ results: response.data.results });
+        
+        // let paperIDs=[]
+        // for (let i=0; i < this.state.results.length; i++) {
+        //   paperIDs.push(uuid.v4())
+          
+        // }
+        // this.setState({results : [...this.state.results,paperIDs]})
+        // console.log("IDs added", this.state.results)
       })
       .catch(err => {
         console.log(err);
@@ -44,7 +51,6 @@ class App extends Component {
   };
 
   delBookmark = bookmarkTitle => {
-    console.log("result", bookmarkTitle)
     this.setState({
       bookmarks: [
         ...this.state.bookmarks.filter(

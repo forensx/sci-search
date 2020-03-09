@@ -29,14 +29,13 @@ export default class Paper extends Component {
 
   unMark() {
     this.setState({ bookmarked: !this.state.bookmarked });
-    console.log("unmarking function!");
-    console.log(this.props.results);
+    console.log("unmarking paper!");
     this.props.delBookmark.bind(this, this.props.results.title);
   }
 
   Mark() {
     this.setState({ bookmarked: !this.state.bookmarked });
-    console.log("marking function!");
+    console.log("marking paper!");
     this.props.addBookmark(this.props.results);
   }
 
@@ -122,9 +121,7 @@ export default class Paper extends Component {
 
     let dateRender;
 
-    if (this.props.results.UTCDatetime === null) {
-      console.log("UTC null");
-      if (this.props.results.pubDate.year === null) {
+    if (this.props.results.UTCDatetime === null) {      if (this.props.results.pubDate.year === null) {
         dateRender = (
           <Descriptions.Item label="Date">Date not available</Descriptions.Item>
         );
@@ -138,14 +135,7 @@ export default class Paper extends Component {
         );
       }
     } else {
-      console.log(
-        "Date is: ",
-        this.props.results.pubDate.day,
-        this.props.results.pubDate.month,
-        this.props.results.pubDate.year
-      );
       const date = new Date(this.props.results.UTCDatetime);
-      console.log(date);
 
       dateRender = (
         <Descriptions.Item label="Date">

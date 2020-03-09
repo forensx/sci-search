@@ -12,6 +12,7 @@ import datetime
 import re
 from statistics import mean 
 import numpy as np
+import uuid
 
 # Uses stopwords for english from NLTK, and all puntuation characters.
 a = Rake(min_length=2, max_length=6)
@@ -147,6 +148,9 @@ class e(Resource):
 
         for i in range(len(combined)):
             combined[i]['ppindex'] = norm_ppindex[i]
+
+        for i in range(len(combined)):
+            combined[i]['ID'] = uuid.uuid4()
         return jsonify({'results': combined})
 
 if __name__ == "__main__":
