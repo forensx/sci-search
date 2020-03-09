@@ -6,7 +6,7 @@ import { StarOutlined, StarFilled } from "@ant-design/icons";
 
 const { Paragraph } = Typography;
 
-export class Paper extends Component {
+export default class Paper extends Component {
   journalCapitalizationCase = journalName => {
     var splitStr = journalName.toLowerCase().split(" ");
     for (var i = 0; i < splitStr.length; i++) {
