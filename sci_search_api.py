@@ -22,7 +22,7 @@ api = Api(app)
 def PP_Index(gdc, pfc, years_passed):
     
     num = (gdc * 6) + (pfc * 5)
-    den = (years_passed/2020)
+    den = (years_passed + 1/2020)
     index_calculated = num/den
 
     return index_calculated
@@ -147,7 +147,7 @@ class e(Resource):
         #  \ return results of search here
 
         for i in range(len(combined)):
-            combined[i]['ppindex'] = norm_ppindex[i]
+            combined[i]['ppindex'] = norm_ppindex[i] + 0.01
 
         for i in range(len(combined)):
             combined[i]['ID'] = uuid.uuid4()

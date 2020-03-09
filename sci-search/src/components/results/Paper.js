@@ -7,6 +7,7 @@ import { StarOutlined, StarFilled } from "@ant-design/icons";
 const { Paragraph } = Typography;
 
 export default class Paper extends Component {
+  
   journalCapitalizationCase = journalName => {
     var splitStr = journalName.toLowerCase().split(" ");
     for (var i = 0; i < splitStr.length; i++) {
@@ -21,11 +22,6 @@ export default class Paper extends Component {
   state = {
     bookmarked: false
   };
-  constructor(props) {
-    super(props);
-    this.Mark = this.Mark.bind(this);
-    this.unMark = this.unMark.bind(this);
-  }
 
   unMark() {
     this.setState({ bookmarked: !this.state.bookmarked });
@@ -40,6 +36,7 @@ export default class Paper extends Component {
   }
 
   render() {
+    console.log(this.props)
     let abstractRender;
 
     if (this.props.results.abstract) {
@@ -121,7 +118,8 @@ export default class Paper extends Component {
 
     let dateRender;
 
-    if (this.props.results.UTCDatetime === null) {      if (this.props.results.pubDate.year === null) {
+    if (this.props.results.UTCDatetime === null) {
+      if (this.props.results.pubDate.year === null) {
         dateRender = (
           <Descriptions.Item label="Date">Date not available</Descriptions.Item>
         );
