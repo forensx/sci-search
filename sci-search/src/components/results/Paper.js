@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { PageHeader, Button, Descriptions, Typography, Alert } from "antd";
-import { Row, Col } from "antd";
+import { PageHeader, Button, Descriptions } from "antd";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 
-const { Paragraph } = Typography;
+export class Paper extends Component {
+  state = {
+    bookmarked: false
+  };
 
-export default class Paper extends Component {
-<<<<<<< HEAD
-=======
-  
->>>>>>> parent of 5b07bd8... Merge branch 'addingBookmarksScratch'
   journalCapitalizationCase = journalName => {
     var splitStr = journalName.toLowerCase().split(" ");
     for (var i = 0; i < splitStr.length; i++) {
@@ -22,26 +19,26 @@ export default class Paper extends Component {
     // Directly return the joined string
     return splitStr.join(" ");
   };
-  state = {
-    bookmarked: false
+
+  setBookmark = tempBookmark => {
+    this.props.addBookmark(tempBookmark);
   };
-  constructor(props) {
-    super(props);
-    this.Mark = this.Mark.bind(this);
-    this.unMark = this.unMark.bind(this);
-  }
 
-  unMark() {
-    this.setState({ bookmarked: !this.state.bookmarked });
-    console.log("unmarking paper!");
-    this.props.delBookmark.bind(this, this.props.results.title);
-  }
+  delBookmark = id => {
+    this.props.removeBookmark(id);
+  };
 
-  Mark() {
+  onChange = e => {
     this.setState({ bookmarked: !this.state.bookmarked });
-    console.log("marking paper!");
-    this.props.addBookmark(this.props.results);
-  }
+    console.log("Paper now: ", this.state.bookmarked);
+    if (this.state.bookmarked === true) {
+      this.delBookmark(this.props.results.ID);
+      console.log("Removed paper");
+    } else {
+      this.setBookmark(this.props.results);
+      console.log("Bookmarked paper: ", this.props.results.ID);
+    }
+  };
 
   render() {
     let abstractRender;
@@ -125,7 +122,9 @@ export default class Paper extends Component {
 
     let dateRender;
 
-    if (this.props.results.UTCDatetime === null) {      if (this.props.results.pubDate.year === null) {
+    if (this.props.results.UTCDatetime === null) {
+      console.log("UTC null");
+      if (this.props.results.pubDate.year === null) {
         dateRender = (
           <Descriptions.Item label="Date">Date not available</Descriptions.Item>
         );
@@ -139,84 +138,87 @@ export default class Paper extends Component {
         );
       }
     } else {
+      console.log(
+        "Date is: ",
+        this.props.results.pubDate.day,
+        this.props.results.pubDate.month,
+        this.props.results.pubDate.year
+      );
       const date = new Date(this.props.results.UTCDatetime);
+      console.log(date);
 
       dateRender = (
         <Descriptions.Item label="Date">
           {date.toLocaleDateString()}
         </Descriptions.Item>
       );
-
-      let button;
-      if (this.state.bookmarked) {
-        button = (
-          <Button type="link" onClick={this.unMark}>
-            <StarFilled />
-          </Button>
-        );
-      } else {
-        button = (
-          <Button type="link" onClick={this.Mark}>
-            <StarOutlined />
-          </Button>
-        );
-      }
-
-      return (
-        <div className="PaperHeader" style={paperStyle}>
-          <PageHeader
-            ghost={false}
-            style={pageStyle}
-            title={
-              <React.Fragment>
-                <a
-                  href={this.props.results.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {this.props.results.title}
-                </a>
-                {button}
-              </React.Fragment>
-            }
-            subTitle={this.props.results.authors
-              .join(", ")
-              .replace(/(([^\s]+\s\s*){11})(.*)/, "$1et al.")}
-            extra={[
-              <Button key="go_paper_button" type="primary">
-                <a
-                  href={this.props.results.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Full Paper
-                </a>
-              </Button>
-            ]}
-          >
-            <Descriptions size="default">{abstractRender}</Descriptions>
-            <Descriptions column={3}>
-              {dateRender}
-              <Descriptions.Item label="Database">
-                {this.props.results.database}
-              </Descriptions.Item>
-              {journalRender}
-            </Descriptions>
-            <Descriptions column={2}>
-              <i>{keywordRender}</i>
-            </Descriptions>
-            <Descriptions column={2}>{geneListRender}</Descriptions>
-            <Descriptions column={1}>
-              <Descriptions.Item label="Paper Priority Index">
-                <b>{this.props.results.ppindex}</b>
-              </Descriptions.Item>
-            </Descriptions>
-          </PageHeader>
-        </div>
-      );
     }
+
+    return (
+      <div className="PaperHeader" style={paperStyle}>
+        <PageHeader
+          ghost={false}
+          style={pageStyle}
+          title={
+            <React.Fragment>
+              <a
+                href={this.props.results.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {this.props.results.title}
+              </a>
+              {this.state.bookmarked ? (
+                <Button type="link" onClick={this.onChange}>
+                  <StarFilled />
+                </Button>
+              ) : (
+                <Button type="link" onClick={this.onChange}>
+                  <StarOutlined />
+                </Button>
+              )}
+            </React.Fragment>
+          }
+          subTitle={this.props.results.authors
+            .join(", ")
+            .replace(/(([^\s]+\s\s*){11})(.*)/, "$1et al.")}
+          extra={[
+            <Button key="go_paper_button" type="primary">
+              <a
+                href={this.props.results.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Full Paper
+              </a>
+            </Button>
+          ]}
+        >
+          <Descriptions size="default">{abstractRender}</Descriptions>
+          <Descriptions column={3}>
+            {dateRender}
+            <Descriptions.Item label="Database">
+              {this.props.results.database}
+            </Descriptions.Item>
+            {journalRender}
+          </Descriptions>
+          <Descriptions column={2}>
+            <i>{keywordRender}</i>
+          </Descriptions>
+          <Descriptions column={2}>{geneListRender}</Descriptions>
+          <Descriptions column={1}>
+            <Descriptions.Item label="Paper Priority Index">
+              <b>{this.props.results.ppindex}</b>
+            </Descriptions.Item>
+          </Descriptions>
+        </PageHeader>
+      </div>
+    );
   }
 }
+
+export default Paper;
+
 Paper.propTypes = {
   results: PropTypes.object.isRequired
 };

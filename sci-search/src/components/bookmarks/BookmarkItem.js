@@ -1,15 +1,38 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { PageHeader, Button, Descriptions, Typography } from "antd";
-import { Row, Col } from "antd";
+import { StarOutlined, StarFilled } from "@ant-design/icons";
 const { Paragraph } = Typography;
 
-export class Bookmark extends Component {
-  render() {
+export default class BookmarkItem extends Component {
+  state = {
+    bookmarked: true // if the bookmark item is being rendered, that means it is a bookmark (hence, true by default)
+  };
 
+  setBookmark = tempBookmark => {
+    this.props.addBookmark(tempBookmark);
+  };
+
+  delBookmark = id => {
+    this.props.removeBookmark(id);
+  };
+
+  onChange = e => {
+    this.setState({ bookmarked: !this.state.bookmarked });
+    console.log("Paper now: ", this.state.bookmarked);
+    if (this.state.bookmarked === true) {
+      this.delBookmark(this.props.bookmark.ID);
+      console.log("Removed paper");
+    } else {
+      this.setBookmark(this.props.bookmark);
+      console.log("Bookmarked paper: ", this.props.bookmark.ID);
+    }
+  };
+
+  render() {
     let abstractRender;
 
-    if (this.props.results.abstract) {
+    if (this.props.bookmark.abstract) {
       abstractRender = (
         <Descriptions.Item
           span={6}
@@ -17,7 +40,10 @@ export class Bookmark extends Component {
           label="Abstract"
           style={{ abstractStyle }}
         >
-          {this.props.results.abstract.replace(/(([^\s]+\s\s*){15})(.*)/, "$1…")}
+          {this.props.bookmark.abstract.replace(
+            /(([^\s]+\s\s*){15})(.*)/,
+            "$1…"
+          )}
         </Descriptions.Item>
       );
     } else {
@@ -35,11 +61,10 @@ export class Bookmark extends Component {
 
     let journalRender;
 
-
-    if (this.props.results.journal) {
+    if (this.props.bookmark.journal) {
       journalRender = (
         <Descriptions.Item label="Journal">
-          {this.props.results.journal}
+          {this.props.bookmark.journal}
         </Descriptions.Item>
       );
     } else {
@@ -57,30 +82,36 @@ export class Bookmark extends Component {
       tempURL = this.props.bookmark.url;
     }
 
-
     let tempAuthors;
     if (this.props.bookmark == undefined) {
       tempAuthors = [""];
     } else {
       tempAuthors = this.props.bookmark.authors;
     }
-
     return (
       <div className="BookmarkHeader" style={BookmarkStyle}>
         <PageHeader
           ghost={false}
           style={pageStyle}
           title={
-            <a
-              href={this.props.results.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {this.props.results.title.replace(
-                /(([^\s]+\s\s*){5})(.*)/,
-                "$1..."
+            <React.Fragment>
+              <a
+                href={this.props.bookmark.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {this.props.bookmark.title}
+              </a>
+              {this.state.bookmarked ? (
+                <Button type="link" onClick={this.onChange}>
+                  <StarFilled />
+                </Button>
+              ) : (
+                <Button type="link" onClick={this.onChange}>
+                  <StarOutlined />
+                </Button>
               )}
-            </a>
+            </React.Fragment>
           }
           subTitle={tempAuthors
             .join(", ")
@@ -94,10 +125,8 @@ export class Bookmark extends Component {
   }
 }
 
-export default Bookmark;
-
-Bookmark.propTypes = {
-  results: PropTypes.object.isRequired
+BookmarkItem.propTypes = {
+  bookmark: PropTypes.object.isRequired
 };
 
 const BookmarkStyle = {

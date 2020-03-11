@@ -17,10 +17,10 @@ class ResultList extends Component {
     );
     return paperList.map(result => (
       <Paper
+        addBookmark={this.props.addBookmark}
+        removeBookmark={this.props.removeBookmark}
         results={result}
         key={result.ID}
-        addBookmark={this.props.addBookmark}
-        delBookmark={this.props.delBookmark}
       />
     ));
   }
