@@ -10,7 +10,8 @@ from rake_nltk import Rake
 import requests
 import datetime
 import re
-from statistics import mean 
+from statistics import mean
+import uuid
 import numpy as np
 import uuid
 
@@ -30,25 +31,27 @@ def PP_Index(gdc, pfc, years_passed):
 
 
 @api.route('/search/<string:search_param>/<int:numResults>')
+@api.doc(params={'search_param': "User's provided search term", 'numResults': "Number of results to query"})
 class e(Resource):
     def get(self, search_param, numResults):
         ppindex_all = []
         search_params = search_param
         page_num = numResults
         pubmed_result = pubmed(search_params, page_num)
-        biorxiv_result = bioarchive(search_params, page_num)
+        #biorxiv_result = bioarchive(search_params, page_num)
         scholar_result = google(search_params, math.ceil(page_num/10))
         medrxiv_result = medrxiv(search_params, math.ceil(page_num/10))
 
         pubmed_arr = pubmed_result['results']
-        biorxiv_arr = biorxiv_result['results']
+        #biorxiv_arr = biorxiv_result['results']
         scholar_arr = scholar_result['results']
         medrxiv_arr = medrxiv_result['results']
-        combined = pubmed_arr + biorxiv_arr + scholar_arr + medrxiv_arr
+        #combined = pubmed_arr + biorxiv_arr + scholar_arr + medrxiv_arr
+        combined = pubmed_arr + scholar_arr + medrxiv_arr
 
         for i in range(len(combined)):
             if combined[i]['abstract']:
-                text = combined[i]['abstract']
+                text = str(combined[i]['abstract'])
                 a.extract_keywords_from_text(text)
                 # To get keyword phrases ranked highest to lowest.
                 keywords_extracted = a.get_ranked_phrases()[0:4]
@@ -148,9 +151,8 @@ class e(Resource):
 
         for i in range(len(combined)):
             combined[i]['ppindex'] = norm_ppindex[i] + 0.01
-
-        for i in range(len(combined)):
             combined[i]['ID'] = uuid.uuid4()
+
         return jsonify({'results': combined})
 
 if __name__ == "__main__":

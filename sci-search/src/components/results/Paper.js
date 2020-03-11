@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { PageHeader, Button, Descriptions, Typography, Alert } from "antd";
-import { Row, Col } from "antd";
+import { PageHeader, Button, Descriptions } from "antd";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 
-const { Paragraph } = Typography;
+export class Paper extends Component {
+  state = {
+    bookmarked: false
+  };
 
-export default class Paper extends Component {
-  
   journalCapitalizationCase = journalName => {
     var splitStr = journalName.toLowerCase().split(" ");
     for (var i = 0; i < splitStr.length; i++) {
@@ -34,6 +34,26 @@ export default class Paper extends Component {
     console.log("marking paper!");
     this.props.addBookmark(this.props.results);
   }
+
+  setBookmark = tempBookmark => {
+    this.props.addBookmark(tempBookmark);
+  };
+
+  delBookmark = id => {
+    this.props.removeBookmark(id);
+  };
+
+  onChange = e => {
+    this.setState({ bookmarked: !this.state.bookmarked });
+    console.log("Paper now: ", this.state.bookmarked);
+    if (this.state.bookmarked === true) {
+      this.delBookmark(this.props.results.ID);
+      console.log("Removed paper");
+    } else {
+      this.setBookmark(this.props.results);
+      console.log("Bookmarked paper: ", this.props.results.ID);
+    }
+  };
 
   render() {
     console.log(this.props)
@@ -141,76 +161,70 @@ export default class Paper extends Component {
         </Descriptions.Item>
       );
 
-      let button;
-      if (this.state.bookmarked) {
-        button = (
-          <Button type="link" onClick={this.unMark}>
-            <StarFilled />
-          </Button>
-        );
-      } else {
-        button = (
-          <Button type="link" onClick={this.Mark}>
-            <StarOutlined />
-          </Button>
-        );
-      }
-
-      return (
-        <div className="PaperHeader" style={paperStyle}>
-          <PageHeader
-            ghost={false}
-            style={pageStyle}
-            title={
-              <React.Fragment>
-                <a
-                  href={this.props.results.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {this.props.results.title}
-                </a>
-                {button}
-              </React.Fragment>
-            }
-            subTitle={this.props.results.authors
-              .join(", ")
-              .replace(/(([^\s]+\s\s*){11})(.*)/, "$1et al.")}
-            extra={[
-              <Button key="go_paper_button" type="primary">
-                <a
-                  href={this.props.results.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Full Paper
-                </a>
-              </Button>
-            ]}
-          >
-            <Descriptions size="default">{abstractRender}</Descriptions>
-            <Descriptions column={3}>
-              {dateRender}
-              <Descriptions.Item label="Database">
-                {this.props.results.database}
-              </Descriptions.Item>
-              {journalRender}
-            </Descriptions>
-            <Descriptions column={2}>
-              <i>{keywordRender}</i>
-            </Descriptions>
-            <Descriptions column={2}>{geneListRender}</Descriptions>
-            <Descriptions column={1}>
-              <Descriptions.Item label="Paper Priority Index">
-                <b>{this.props.results.ppindex}</b>
-              </Descriptions.Item>
-            </Descriptions>
-          </PageHeader>
-        </div>
-      );
-    }
+    return (
+      <div className="PaperHeader" style={paperStyle}>
+        <PageHeader
+          ghost={false}
+          style={pageStyle}
+          title={
+            <React.Fragment>
+              <a
+                href={this.props.results.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {this.props.results.title}
+              </a>
+              {this.state.bookmarked ? (
+                <Button type="link" onClick={this.onChange}>
+                  <StarFilled />
+                </Button>
+              ) : (
+                <Button type="link" onClick={this.onChange}>
+                  <StarOutlined />
+                </Button>
+              )}
+            </React.Fragment>
+          }
+          subTitle={this.props.results.authors
+            .join(", ")
+            .replace(/(([^\s]+\s\s*){11})(.*)/, "$1et al.")}
+          extra={[
+            <Button key="go_paper_button" type="primary">
+              <a
+                href={this.props.results.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Full Paper
+              </a>
+            </Button>
+          ]}
+        >
+          <Descriptions size="default">{abstractRender}</Descriptions>
+          <Descriptions column={3}>
+            {dateRender}
+            <Descriptions.Item label="Database">
+              {this.props.results.database}
+            </Descriptions.Item>
+            {journalRender}
+          </Descriptions>
+          <Descriptions column={2}>
+            <i>{keywordRender}</i>
+          </Descriptions>
+          <Descriptions column={2}>{geneListRender}</Descriptions>
+          <Descriptions column={1}>
+            <Descriptions.Item label="Paper Priority Index">
+              <b>{this.props.results.ppindex}</b>
+            </Descriptions.Item>
+          </Descriptions>
+        </PageHeader>
+      </div>
+    );
   }
 }
+}
+
 Paper.propTypes = {
   results: PropTypes.object.isRequired
 };

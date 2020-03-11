@@ -1,14 +1,6 @@
 import React, { Component } from "react";
-import { List, Avatar } from "antd";
 import PropTypes from "prop-types";
 import Paper from "./Paper";
-
-const IconText = ({ icon, text }) => (
-  <span>
-    {React.createElement(icon, { style: { marginRight: 8 } })}
-    {text}
-  </span>
-);
 
 class ResultList extends Component {
   render() {
