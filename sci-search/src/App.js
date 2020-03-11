@@ -7,6 +7,10 @@ import "antd/dist/antd.css";
 import Search from "./components/Search";
 import BookmarkList from "./components/bookmarks/BookmarkList";
 import { search_api } from "./components/DataFunctions";
+import { Result, Button } from "antd";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { message } from 'antd';
 
 const { Header, Content, Sider } = Layout;
 
@@ -15,7 +19,8 @@ class App extends Component {
     collapsed: false,
     searchTerm: "",
     results: [],
-    bookmarks: []
+    bookmarks: [],
+    isLoading: false
   };
 
   onCollapse = collapsed => {
@@ -25,38 +30,45 @@ class App extends Component {
 
   setSearch = search => {
     console.log("User searched (setting in App): ", search);
-    this.setState({ searchTerm: search });
+    this.setState({ searchTerm: search, isLoading: true });
+
+    console.log("User is now loading papers: ", this.state.isLoading);
 
     // API call from Flask
     search_api(search)
       .then(response => {
         console.log("Response: ", response.data.results);
-        this.setState({ results: response.data.results });
+        this.setState({ results: response.data.results, isLoading: false });
+        console.log("User is done loading papers: ", this.state.isLoading);
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  addBookmark = (tempBookmark) => {
+  addBookmark = tempBookmark => {
     console.log(tempBookmark);
     if (tempBookmark.title !== "") {
       this.setState({ bookmarks: [...this.state.bookmarks, tempBookmark] });
     }
+    message.success('Paper bookmarked!', 1);
   };
 
   removeBookmark = id => {
-    console.log("Removed", id)
+    console.log("Removed", id);
     this.setState({
-      bookmarks: [...this.state.bookmarks.filter(bookmark => bookmark.ID !== id)]
+      bookmarks: [
+        ...this.state.bookmarks.filter(bookmark => bookmark.ID !== id)
+      ]
     });
+    message.warning('Paper removed from bookmarks.', 1);
   };
 
   render() {
     return (
       <div className="App">
         <Layout>
-          <Header style={{ color: "white", fontSize: "26px" }}>
+          <Header style={{ color: "white", fontSize: "24px" }}>
             Sci-Search
           </Header>
           <Layout style={{ minHeight: "90vh" }}>
@@ -80,11 +92,25 @@ class App extends Component {
                 <Search setSearch={this.setSearch} />
               </div>
               <div>
-                <ResultList
-                  results={this.state.results}
-                  addBookmark={this.addBookmark}
-                  removeBookmark={this.removeBookmark}
-                />
+                {this.state.isLoading ? (
+                  <Result
+                    title="Your search has been executed"
+                    icon={
+                      <Spin
+                        size="large"
+                        indicator={
+                          <LoadingOutlined style={{ fontSize: 50 }} spin />
+                        }
+                      />
+                    }
+                  />
+                ) : (
+                  <ResultList
+                    results={this.state.results}
+                    addBookmark={this.addBookmark}
+                    removeBookmark={this.removeBookmark}
+                  />
+                )}
               </div>
             </Content>
           </Layout>

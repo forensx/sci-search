@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { PageHeader, Button, Descriptions, Typography } from "antd";
 import { Row, Col } from "antd";
 import { Checkbox } from "antd";
+import { StarOutlined, StarFilled } from "@ant-design/icons";
 const { Paragraph } = Typography;
 
 export class Paper extends Component {
@@ -22,7 +23,7 @@ export class Paper extends Component {
     return splitStr.join(" ");
   };
 
-  setBookmark = (tempBookmark) => {
+  setBookmark = tempBookmark => {
     this.props.addBookmark(tempBookmark);
   };
 
@@ -162,13 +163,24 @@ export class Paper extends Component {
           ghost={false}
           style={pageStyle}
           title={
-            <a
-              href={this.props.results.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {this.props.results.title}
-            </a>
+            <React.Fragment>
+              <a
+                href={this.props.results.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {this.props.results.title}
+              </a>
+              {this.state.bookmarked ? (
+                <Button type="link" onClick={this.onChange}>
+                  <StarFilled />
+                </Button>
+              ) : (
+                <Button type="link" onClick={this.onChange}>
+                  <StarOutlined />
+                </Button>
+              )}
+            </React.Fragment>
           }
           subTitle={this.props.results.authors
             .join(", ")
