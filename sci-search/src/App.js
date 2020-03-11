@@ -33,6 +33,13 @@ class App extends Component {
         console.log("Response: ", response.data.results);
         this.setState({ results: response.data.results });
         
+        // let paperIDs=[]
+        // for (let i=0; i < this.state.results.length; i++) {
+        //   paperIDs.push(uuid.v4())
+          
+        // }
+        // this.setState({results : [...this.state.results,paperIDs]})
+        // console.log("IDs added", this.state.results)
       })
       .catch(err => {
         console.log(err);
