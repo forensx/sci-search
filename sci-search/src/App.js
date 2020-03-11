@@ -33,6 +33,7 @@ class App extends Component {
         console.log("Response: ", response.data.results);
         this.setState({ results: response.data.results });
         
+<<<<<<< HEAD
         // let paperIDs=[]
         // for (let i=0; i < this.state.results.length; i++) {
         //   paperIDs.push(uuid.v4())
@@ -40,6 +41,8 @@ class App extends Component {
         // }
         // this.setState({results : [...this.state.results,paperIDs]})
         // console.log("IDs added", this.state.results)
+=======
+>>>>>>> parent of 5b07bd8... Merge branch 'addingBookmarksScratch'
       })
       .catch(err => {
         console.log(err);

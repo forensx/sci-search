@@ -147,7 +147,11 @@ class e(Resource):
         #  \ return results of search here
 
         for i in range(len(combined)):
+<<<<<<< HEAD
             combined[i]['ppindex'] = norm_ppindex[i]
+=======
+            combined[i]['ppindex'] = norm_ppindex[i] + 0.01
+>>>>>>> parent of 5b07bd8... Merge branch 'addingBookmarksScratch'
 
         for i in range(len(combined)):
             combined[i]['ID'] = uuid.uuid4()

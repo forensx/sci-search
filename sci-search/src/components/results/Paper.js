@@ -7,6 +7,10 @@ import { StarOutlined, StarFilled } from "@ant-design/icons";
 const { Paragraph } = Typography;
 
 export default class Paper extends Component {
+<<<<<<< HEAD
+=======
+  
+>>>>>>> parent of 5b07bd8... Merge branch 'addingBookmarksScratch'
   journalCapitalizationCase = journalName => {
     var splitStr = journalName.toLowerCase().split(" ");
     for (var i = 0; i < splitStr.length; i++) {
