@@ -52,7 +52,10 @@ class App extends Component {
       this.setState({ bookmarks: [...this.state.bookmarks, tempBookmark] });
     }
     message.success("Paper bookmarked!", 1);
-    window.localStorage.setItem("userBookmark", JSON.stringify(this.state.bookmarks));
+    window.localStorage.setItem(
+      "userBookmark",
+      JSON.stringify(this.state.bookmarks)
+    );
   };
 
   removeBookmark = id => {
@@ -63,11 +66,16 @@ class App extends Component {
       ]
     });
     message.warning("Paper removed from bookmarks.", 1);
-    window.localStorage.setItem("userBookmarks", JSON.stringify(this.state.bookmarks));
+    window.localStorage.setItem(
+      "userBookmarks",
+      JSON.stringify(this.state.bookmarks)
+    );
   };
 
   componentDidMount() {
-    this.userBookmarks = JSON.parse(window.localStorage.getItem("userBookmarks"));
+    this.userBookmarks = JSON.parse(
+      window.localStorage.getItem("userBookmarks")
+    );
 
     if (window.localStorage.getItem("userBookmarks")) {
       console.log("Bookmarks on user device exist");
@@ -99,6 +107,8 @@ class App extends Component {
               <BookmarkList
                 bookmarks={this.state.bookmarks}
                 style={{ padding: "0%", margin: "0%" }}
+                addBookmark={this.addBookmark.bind(this)}
+                removeBookmark={this.removeBookmark.bind(this)}
               />
             </Sider>
             <Content>

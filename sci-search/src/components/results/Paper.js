@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { PageHeader, Button, Descriptions, Typography } from "antd";
-import { Row, Col } from "antd";
-import { Checkbox } from "antd";
+import { PageHeader, Button, Descriptions } from "antd";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
-const { Paragraph } = Typography;
 
 export class Paper extends Component {
   state = {

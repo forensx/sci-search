@@ -1,10 +1,34 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { PageHeader, Button, Descriptions, Typography } from "antd";
-import { Row, Col } from "antd";
+import { StarOutlined, StarFilled } from "@ant-design/icons";
 const { Paragraph } = Typography;
 
 export default class BookmarkItem extends Component {
+  state = {
+    bookmarked: true // if the bookmark item is being rendered, that means it is a bookmark (hence, true by default)
+  };
+
+  setBookmark = tempBookmark => {
+    this.props.addBookmark(tempBookmark);
+  };
+
+  delBookmark = id => {
+    this.props.removeBookmark(id);
+  };
+
+  onChange = e => {
+    this.setState({ bookmarked: !this.state.bookmarked });
+    console.log("Paper now: ", this.state.bookmarked);
+    if (this.state.bookmarked === true) {
+      this.delBookmark(this.props.bookmark.ID);
+      console.log("Removed paper");
+    } else {
+      this.setBookmark(this.props.bookmark);
+      console.log("Bookmarked paper: ", this.props.bookmark.ID);
+    }
+  };
+
   render() {
     let abstractRender;
 
@@ -70,16 +94,24 @@ export default class BookmarkItem extends Component {
           ghost={false}
           style={pageStyle}
           title={
-            <a
-              href={this.props.bookmark.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {this.props.bookmark.title.replace(
-                /(([^\s]+\s\s*){5})(.*)/,
-                "$1..."
+            <React.Fragment>
+              <a
+                href={this.props.bookmark.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {this.props.bookmark.title}
+              </a>
+              {this.state.bookmarked ? (
+                <Button type="link" onClick={this.onChange}>
+                  <StarFilled />
+                </Button>
+              ) : (
+                <Button type="link" onClick={this.onChange}>
+                  <StarOutlined />
+                </Button>
               )}
-            </a>
+            </React.Fragment>
           }
           subTitle={tempAuthors
             .join(", ")
@@ -97,16 +129,15 @@ BookmarkItem.propTypes = {
   bookmark: PropTypes.object.isRequired
 };
 
-
 const BookmarkStyle = {
-    backgroundColor: "#f5f5f5",
-    padding: "0.5% 5% 0.5% 2%"
-  };
-  
-  const pageStyle = {
-    boxShadow: "0 1px 1px 0 rgba(0, 0, 0, 0.1), 0 2px 3px 0 rgba(0, 0, 0, 0.1)"
-  };
-  
-  const abstractStyle = {
-    minWidth: "400px"
-  };
+  backgroundColor: "#f5f5f5",
+  padding: "0.5% 5% 0.5% 2%"
+};
+
+const pageStyle = {
+  boxShadow: "0 1px 1px 0 rgba(0, 0, 0, 0.1), 0 2px 3px 0 rgba(0, 0, 0, 0.1)"
+};
+
+const abstractStyle = {
+  minWidth: "400px"
+};

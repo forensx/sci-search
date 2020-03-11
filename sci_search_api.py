@@ -30,6 +30,7 @@ def PP_Index(gdc, pfc, years_passed):
 
 
 @api.route('/search/<string:search_param>/<int:numResults>')
+@api.doc(params={'search_param': "User's provided search term", 'numResults': "Number of results to query"})
 class e(Resource):
     def get(self, search_param, numResults):
         ppindex_all = []
@@ -49,7 +50,7 @@ class e(Resource):
 
         for i in range(len(combined)):
             if combined[i]['abstract']:
-                text = combined[i]['abstract']
+                text = str(combined[i]['abstract'])
                 a.extract_keywords_from_text(text)
                 # To get keyword phrases ranked highest to lowest.
                 keywords_extracted = a.get_ranked_phrases()[0:4]
