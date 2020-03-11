@@ -22,8 +22,8 @@ export class Paper extends Component {
     return splitStr.join(" ");
   };
 
-  setBookmark = (title, id) => {
-    this.props.addBookmark(title, id);
+  setBookmark = (tempBookmark) => {
+    this.props.addBookmark(tempBookmark);
   };
 
   delBookmark = id => {
@@ -37,8 +37,8 @@ export class Paper extends Component {
       this.delBookmark(this.props.results.ID);
       console.log("Removed paper");
     } else {
-      this.setBookmark(this.props.results.title, this.props.results.ID);
-      console.log("Bookmarked paper");
+      this.setBookmark(this.props.results);
+      console.log("Bookmarked paper: ", this.props.results.ID);
     }
   };
 

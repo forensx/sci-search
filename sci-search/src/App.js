@@ -38,21 +38,17 @@ class App extends Component {
       });
   };
 
-  addBookmark = (title, id) => {
-    console.log(title);
-    if (title !== "") {
-      const newBookmark = {
-        id,
-        title
-      };
-      this.setState({ bookmarks: [...this.state.bookmarks, newBookmark] });
+  addBookmark = (tempBookmark) => {
+    console.log(tempBookmark);
+    if (tempBookmark.title !== "") {
+      this.setState({ bookmarks: [...this.state.bookmarks, tempBookmark] });
     }
   };
 
   removeBookmark = id => {
     console.log("Removed", id)
     this.setState({
-      bookmarks: [...this.state.bookmarks.filter(bookmark => bookmark.id !== id)]
+      bookmarks: [...this.state.bookmarks.filter(bookmark => bookmark.ID !== id)]
     });
   };
 
