@@ -10,7 +10,7 @@ import { search_api } from "./components/DataFunctions";
 import { Result, Button } from "antd";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import { message } from 'antd';
+import { message } from "antd";
 
 const { Header, Content, Sider } = Layout;
 
@@ -51,7 +51,8 @@ class App extends Component {
     if (tempBookmark.title !== "") {
       this.setState({ bookmarks: [...this.state.bookmarks, tempBookmark] });
     }
-    message.success('Paper bookmarked!', 1);
+    message.success("Paper bookmarked!", 1);
+    window.localStorage.setItem("userBookmark", JSON.stringify(this.state.bookmarks));
   };
 
   removeBookmark = id => {
@@ -61,8 +62,21 @@ class App extends Component {
         ...this.state.bookmarks.filter(bookmark => bookmark.ID !== id)
       ]
     });
-    message.warning('Paper removed from bookmarks.', 1);
+    message.warning("Paper removed from bookmarks.", 1);
+    window.localStorage.setItem("userBookmarks", JSON.stringify(this.state.bookmarks));
   };
+
+  componentDidMount() {
+    this.userBookmarks = JSON.parse(window.localStorage.getItem("userBookmarks"));
+
+    if (window.localStorage.getItem("userBookmarks")) {
+      console.log("Bookmarks on user device exist");
+      this.setState({ bookmarks: this.userBookmarks });
+    } else {
+      console.log("Bookmarks on user device DO NOT exist");
+      this.setState({ bookmarks: [] });
+    }
+  }
 
   render() {
     return (

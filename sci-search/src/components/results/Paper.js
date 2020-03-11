@@ -212,7 +212,6 @@ export class Paper extends Component {
           <Descriptions column={1}>
             <Descriptions.Item label="Paper Priority Index">
               <b>{this.props.results.ppindex}</b>
-              <Checkbox onChange={this.onChange}>Bookmark</Checkbox>
             </Descriptions.Item>
           </Descriptions>
         </PageHeader>
