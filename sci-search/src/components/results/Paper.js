@@ -2,9 +2,14 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { PageHeader, Button, Descriptions, Typography } from "antd";
 import { Row, Col } from "antd";
+import { Checkbox } from "antd";
 const { Paragraph } = Typography;
 
 export class Paper extends Component {
+  state = {
+    bookmarked: false
+  };
+
   journalCapitalizationCase = journalName => {
     var splitStr = journalName.toLowerCase().split(" ");
     for (var i = 0; i < splitStr.length; i++) {
@@ -15,6 +20,26 @@ export class Paper extends Component {
     }
     // Directly return the joined string
     return splitStr.join(" ");
+  };
+
+  setBookmark = (title, id) => {
+    this.props.addBookmark(title, id);
+  };
+
+  delBookmark = id => {
+    this.props.removeBookmark(id);
+  };
+
+  onChange = e => {
+    this.setState({ bookmarked: !this.state.bookmarked });
+    console.log("Paper now: ", this.state.bookmarked);
+    if (this.state.bookmarked === true) {
+      this.delBookmark(this.props.results.ID);
+      console.log("Removed paper");
+    } else {
+      this.setBookmark(this.props.results.title, this.props.results.ID);
+      console.log("Bookmarked paper");
+    }
   };
 
   render() {
@@ -168,11 +193,14 @@ export class Paper extends Component {
             </Descriptions.Item>
             {journalRender}
           </Descriptions>
-          <Descriptions column={2}><i>{keywordRender}</i></Descriptions>
+          <Descriptions column={2}>
+            <i>{keywordRender}</i>
+          </Descriptions>
           <Descriptions column={2}>{geneListRender}</Descriptions>
           <Descriptions column={1}>
             <Descriptions.Item label="Paper Priority Index">
               <b>{this.props.results.ppindex}</b>
+              <Checkbox onChange={this.onChange}>Bookmark</Checkbox>
             </Descriptions.Item>
           </Descriptions>
         </PageHeader>
