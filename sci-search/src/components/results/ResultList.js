@@ -19,7 +19,7 @@ class ResultList extends Component {
       <Paper
         addBookmark={this.props.addBookmark}
         removeBookmark={this.props.removeBookmark}
-        results={result}
+        result={result}
         key={result.ID}
       />
     ));

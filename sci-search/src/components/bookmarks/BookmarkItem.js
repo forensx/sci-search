@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { PageHeader, Button, Descriptions, Typography } from "antd";
+import { PageHeader, Button, Descriptions } from "antd";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
-const { Paragraph } = Typography;
 
 export default class BookmarkItem extends Component {
   state = {
@@ -75,15 +74,8 @@ export default class BookmarkItem extends Component {
       );
     }
 
-    let tempURL;
-    if (this.props.bookmark == undefined) {
-      tempURL = "";
-    } else {
-      tempURL = this.props.bookmark.url;
-    }
-
     let tempAuthors;
-    if (this.props.bookmark == undefined) {
+    if (this.props.bookmark === undefined) {
       tempAuthors = [""];
     } else {
       tempAuthors = this.props.bookmark.authors;

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "./App.css";
 import ResultList from "./components/results/ResultList";
 import { Layout, Menu } from "antd";
@@ -10,19 +10,9 @@ import { Result } from "antd";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { message } from "antd";
-import Sidebar from "./components/Sidebar";
-
 const { Header, Content, Sider } = Layout;
 
-class App extends Component {
-  state = {
-    collapsed: false,
-    searchTerm: "",
-    results: [],
-    bookmarks: [],
-    isLoading: false
-  };
-
+function App_Redux() {
   onCollapse = collapsed => {
     console.log("Sidebar toggled: ", collapsed);
     this.setState({ collapsed });
@@ -72,60 +62,58 @@ class App extends Component {
     );
   };
 
-  componentDidMount() {
-    this.userBookmarks = JSON.parse(
-      window.localStorage.getItem("userBookmarks")
-    );
-
-    if (window.localStorage.getItem("userBookmarks")) {
-      console.log("Bookmarks on user device exist");
-      this.setState({ bookmarks: this.userBookmarks });
-    } else {
-      console.log("Bookmarks on user device DO NOT exist");
-      this.setState({ bookmarks: [] });
-    }
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <Layout>
-          <Header style={{ color: "white", fontSize: "24px" }}>
-            Sci-Search
-          </Header>
-          <Layout style={{ minHeight: "90vh" }}>
-            <Sidebar />
-            <Content>
-              <div>
-                <Search setSearch={this.setSearch} />
-              </div>
-              <div>
-                {this.state.isLoading ? (
-                  <Result
-                    title="Your search has been executed"
-                    icon={
-                      <Spin
-                        size="large"
-                        indicator={
-                          <LoadingOutlined style={{ fontSize: 50 }} spin />
-                        }
-                      />
-                    }
-                  />
-                ) : (
-                  <ResultList
-                    results={this.state.results}
-                    addBookmark={this.addBookmark}
-                    removeBookmark={this.removeBookmark}
-                  />
-                )}
-              </div>
-            </Content>
-          </Layout>
+  return (
+    <div className="App">
+      <Layout>
+        <Header style={{ color: "white", fontSize: "24px" }}>Sci-Search</Header>
+        <Layout style={{ minHeight: "90vh" }}>
+          <Sider
+            collapsible
+            collapsed={this.state.collapsed}
+            onCollapse={this.onCollapse}
+          >
+            <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+              <Menu.Item key="1">
+                <span>Bookmarked Papers</span>
+              </Menu.Item>
+            </Menu>
+            <BookmarkList
+              bookmarks={this.state.bookmarks}
+              style={{ padding: "0%", margin: "0%" }}
+              addBookmark={this.addBookmark.bind(this)}
+              removeBookmark={this.removeBookmark.bind(this)}
+            />
+          </Sider>
+          <Content>
+            <div>
+              <Search setSearch={this.setSearch} />
+            </div>
+            <div>
+              {this.state.isLoading ? (
+                <Result
+                  title="Your search has been executed"
+                  icon={
+                    <Spin
+                      size="large"
+                      indicator={
+                        <LoadingOutlined style={{ fontSize: 50 }} spin />
+                      }
+                    />
+                  }
+                />
+              ) : (
+                <ResultList
+                  results={this.state.results}
+                  addBookmark={this.addBookmark}
+                  removeBookmark={this.removeBookmark}
+                />
+              )}
+            </div>
+          </Content>
         </Layout>
-      </div>
-    );
-  }
+      </Layout>
+    </div>
+  );
 }
 
-export default App;
+export default App_Redux;
