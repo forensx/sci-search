@@ -1,4 +1,4 @@
-import { setSearch, sidebarToggle } from "../actions";
+import { setSearch, sidebarToggle, getPapers } from "../actions";
 import { createReducer } from "@reduxjs/toolkit";
 
 export const searchReducer = createReducer(
@@ -15,6 +15,15 @@ export const sidebarReducer = createReducer(
   {
     [sidebarToggle]: (state, action) => {
       state.sidebarCollapsed = action.payload;
+    }
+  }
+);
+
+export const papersReducer = createReducer(
+  {},
+  {
+    [getPapers]: (state, action) => {
+      state.papers = action.payload;
     }
   }
 );
