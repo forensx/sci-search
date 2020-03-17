@@ -22,8 +22,12 @@ export const sidebarReducer = createReducer(
 export const papersReducer = createReducer(
   {},
   {
-    [getPapers]: (state, action) => {
-      state.papers = action.payload;
+    [getPapers.GET_PAPERS]: (state, action) => {
+      state.loading = true;
+    },
+    [getPapers.PAPERS_RECEIVED]: (state, action) => {
+      state.loading = false;
+      state.papersResult = action.payload;
     }
   }
 );

@@ -10,9 +10,13 @@ import { Result } from "antd";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { message } from "antd";
+import { useDispatch } from "react-redux";
 const { Header, Content, Sider } = Layout;
 
 function App_Redux() {
+
+  const dispatch = useDispatch();
+
   onCollapse = collapsed => {
     console.log("Sidebar toggled: ", collapsed);
     this.setState({ collapsed });
@@ -86,7 +90,7 @@ function App_Redux() {
           </Sider>
           <Content>
             <div>
-              <Search setSearch={this.setSearch} />
+              <Search />
             </div>
             <div>
               {this.state.isLoading ? (
