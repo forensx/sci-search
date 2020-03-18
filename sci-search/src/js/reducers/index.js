@@ -1,33 +1,66 @@
-import { setSearch, sidebarToggle, getPapers } from "../actions";
-import { createReducer } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
+import {
+  SELECT_QUERY,
+  REQUEST_PAPERS,
+  INVALIDATE_PAPERS,
+  RECEIVE_PAPERS
+} from "../actions";
 
-export const searchReducer = createReducer(
-  {},
-  {
-    [setSearch]: (state, action) => {
-      state.searchQuery = action.payload;
-    }
+function selectedQuery(state = "reactjs", action) {
+  switch (action.type) {
+    case SELECT_QUERY:
+      return action.query;
+    default:
+      return state;
   }
-);
+}
 
-export const sidebarReducer = createReducer(
-  {},
-  {
-    [sidebarToggle]: (state, action) => {
-      state.sidebarCollapsed = action.payload;
-    }
+function papers(
+  state = {
+    isFetching: false,
+    didInvalidate: false,
+    papers: []
+  },
+  action
+) {
+  switch (action.type) {
+    case INVALIDATE_PAPERS:
+      return Object.assign({}, state, {
+        didInvalidate: true
+      });
+    case REQUEST_PAPERS:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      });
+    case RECEIVE_PAPERS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        papers: action.papers,
+        lastUpdated: action.receivedAt
+      });
+    default:
+      return state;
   }
-);
+}
 
-export const papersReducer = createReducer(
-  {},
-  {
-    [getPapers.GET_PAPERS]: (state, action) => {
-      state.loading = true;
-    },
-    [getPapers.PAPERS_RECEIVED]: (state, action) => {
-      state.loading = false;
-      state.papersResult = action.payload;
-    }
+function papersByquery(state = {}, action) {
+  switch (action.type) {
+    case INVALIDATE_PAPERS:
+    case RECEIVE_PAPERS:
+    case REQUEST_PAPERS:
+      return Object.assign({}, state, {
+        [action.query]: papers(state[action.query], action)
+      });
+    default:
+      return state;
   }
-);
+}
+
+const rootReducer = combineReducers({
+  papersByquery,
+  selectedQuery
+});
+
+export default rootReducer;

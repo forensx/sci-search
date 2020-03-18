@@ -1,14 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { searchReducer, sidebarReducer } from "../reducers/index";
-import { applyMiddleware } from 'redux';
-import { logger } from 'redux-logger';
+import thunkMiddleware from "redux-thunk";
+import { createLogger } from "redux-logger";
+import { createStore, applyMiddleware } from "redux";
+import { selectQuery, fetchPapersIfNeeded } from "../actions";
+import rootReducer from "../reducers";
 
+const loggerMiddleware = createLogger();
 
-const store = configureStore({
-  reducer: {
-    search: searchReducer,
-    sidebar: sidebarReducer
-  }
-});
+const store = createStore(
+  rootReducer,
+  applyMiddleware(
+    thunkMiddleware, // lets us dispatch() functions
+    loggerMiddleware // neat middleware that logs actions
+  )
+);
+
+store.dispatch(selectQuery("brca1"));
+store
+  .dispatch(fetchPapersIfNeeded("brca1"))
+  .then(() => console.log("From index", store.getState()));
 
 export default store;

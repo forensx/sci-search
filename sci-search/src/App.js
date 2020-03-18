@@ -25,8 +25,7 @@ export default function App() {
             <div>
               <Search />
             </div>
-            <div>
-            </div>
+            <div></div>
           </Content>
         </Layout>
       </Layout>

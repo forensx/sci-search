@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "antd";
 import { useDispatch } from "react-redux";
-import { setSearch } from "../js/actions/index";
+//import { setSearch } from "../js/actions/index";
 const { Search } = Input;
 
 function SearchComp() {
@@ -13,7 +13,7 @@ function SearchComp() {
         placeholder="Enter a search term here"
         enterButton="Search"
         size="large"
-        onSearch={title => dispatch(setSearch(title))}
+        //onSearch={title => dispatch(setSearch(title))}
       />
     </div>
   );
