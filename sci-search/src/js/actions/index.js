@@ -36,7 +36,7 @@ export function invalidatePapers(query) {
 function fetchPapers(query) {
   return dispatch => {
     dispatch(requestPapers(query));
-    return fetch(`http://localhost:5000/search/${query}/2`)
+    return fetch(`http://localhost:5000/search/${query}/3`)
       .then(response => response.json())
       .then(json => dispatch(receivePapers(query, json)));
   };
