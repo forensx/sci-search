@@ -6,7 +6,7 @@ import {
   RECEIVE_PAPERS
 } from "../actions";
 
-function selectedQuery(state = "reactjs", action) {
+function selectedQuery(state = null, action) {
   switch (action.type) {
     case SELECT_QUERY:
       return action.query;

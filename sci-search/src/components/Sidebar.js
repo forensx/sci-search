@@ -6,7 +6,6 @@ import BookmarkList from "./bookmarks/BookmarkList";
 const { Sider } = Layout;
 
 function Sidebar() {
-  
   const bookmarks = [];
   //const sidebarCollapsed = useSelector(state => state.sidebar.sidebarCollapsed);
   //const dispatch = useDispatch();

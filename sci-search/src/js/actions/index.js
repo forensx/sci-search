@@ -38,10 +38,7 @@ function fetchPapers(query) {
     dispatch(requestPapers(query));
     return fetch(`http://localhost:5000/search/${query}/2`)
       .then(response => response.json())
-      .then(json => dispatch(receivePapers(query, json)))
-      .then(json =>
-        console.log("User queried data before sending to store", json)
-      );
+      .then(json => dispatch(receivePapers(query, json)));
   };
 }
 
@@ -57,12 +54,6 @@ function shouldFetchPapers(state, query) {
 }
 
 export function fetchPapersIfNeeded(query) {
-  // Note that the function also receives getState()
-  // which lets you choose what to dispatch next.
-
-  // This is useful for avoiding a network request if
-  // a cached value is already available.
-
   return (dispatch, getState) => {
     if (shouldFetchPapers(getState(), query)) {
       // Dispatch a thunk from thunk!

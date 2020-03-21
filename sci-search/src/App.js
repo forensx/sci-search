@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import ResultList from "./components/results/ResultList";
 import { Layout, Menu } from "antd";
@@ -11,8 +12,7 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { message } from "antd";
 import Sidebar from "./components/Sidebar";
-
-const { Header, Content, Sider } = Layout;
+const { Header, Content } = Layout;
 
 export default function App() {
   return (
@@ -25,7 +25,9 @@ export default function App() {
             <div>
               <Search />
             </div>
-            <div></div>
+            <div>
+              <ResultList />
+            </div>
           </Content>
         </Layout>
       </Layout>

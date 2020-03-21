@@ -1,7 +1,6 @@
 import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
 import { createStore, applyMiddleware } from "redux";
-import { selectQuery, fetchPapersIfNeeded } from "../actions";
 import rootReducer from "../reducers";
 
 const loggerMiddleware = createLogger();
@@ -13,10 +12,5 @@ const store = createStore(
     loggerMiddleware // neat middleware that logs actions
   )
 );
-
-store.dispatch(selectQuery("brca1"));
-store
-  .dispatch(fetchPapersIfNeeded("brca1"))
-  .then(() => console.log("From index", store.getState()));
 
 export default store;

@@ -21,26 +21,6 @@ export class Paper extends Component {
     return splitStr.join(" ");
   };
 
-  setBookmark = tempBookmark => {
-    this.props.addBookmark(tempBookmark);
-  };
-
-  delBookmark = id => {
-    this.props.removeBookmark(id);
-  };
-
-  onChange = e => {
-    this.setState({ bookmarked: !this.state.bookmarked });
-    console.log("Paper now: ", this.state.bookmarked);
-    if (this.state.bookmarked === true) {
-      this.delBookmark(this.props.result.ID);
-      console.log("Removed paper");
-    } else {
-      this.setBookmark(this.props.result);
-      console.log("Bookmarked paper: ", this.props.result.ID);
-    }
-  };
-
   render() {
     let abstractRender;
 
