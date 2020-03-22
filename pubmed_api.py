@@ -1,131 +1,150 @@
-import requests
+import aiohttp
 import json
-import xmltodict
+import asyncio
+import xml.etree.ElementTree as ET
+import datetime
+from metrics import find_gdcpfc, find_genes
 
-def pubmed(query, number):
-    if number == 1:
-        number == 2
-    else:
-        pass
+
+base = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
+base_fetch = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
+
+
+
+
+async def fetch_papers(ids):
+
+    FETCH_PARAMS = {
+        'db': 'pubmed',
+        'retmode': 'xml',
+        'id': ids
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(base_fetch, params = FETCH_PARAMS) as resp:
+            papers = await resp.text()
+            return papers
+
+
+
+
+async def pubmed(query, number):
+    #3 req/sec without api key
+    
     results = []
-    PARAMS_SEARCH = {
+
+    SEARCH_PARAMS = {
         'db': 'pubmed',
         'retmode': 'json',
         'retmax': number,
         'sort': 'relevance',
-        'term': query,
+        'term': query
     }
-    r = requests.get(
-        'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi', params=PARAMS_SEARCH)
-    result_json = r.json()
 
-    id_list = (result_json['esearchresult']['idlist'])
-    if (len(id_list) > 1):
-        id_list = ', '.join(id_list)
-    PARAMS_FETCH = {
-        'db': 'pubmed',
-        'retmode': 'xml',
-        'id': id_list,
-    }
-    papers = requests.get(
-        'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi', params=PARAMS_FETCH)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(base, params = SEARCH_PARAMS) as resp:
+            data = await resp.json()
+            
+            id_list = data['esearchresult']['idlist']
+            if len(id_list) == 0:
+                final_noresult = [{
+                        'database': 'PubMed',
+                        'error': 'No results found'
+                    }]
+                return final_noresult
+            elif len(id_list) > 1:
+                id_list = ','.join(id_list)
+            else:
+                id_list = id_list[0]
+            
+            xml = await fetch_papers(id_list)
 
-    papers_json = xmltodict.parse(papers.text)
-    with open('test3.json', 'w') as f:
-            json.dump(papers_json, f)
-    for article in papers_json['PubmedArticleSet']['PubmedArticle']:
-        title = ""
-        journal = ""
-        url = ""
-        authors = []
-        pubDate = {
-            'year': "",
-            'month': "",
-            'day': "",
-        }
-        abstract = ""
-        # getting the Article Title
-        try:
-            title = article['MedlineCitation']['Article']['ArticleTitle']['#text']
-        except:
-            title = article['MedlineCitation']['Article']['ArticleTitle']
-        title = title.strip("[].")
-        # getting the journal title
-        journal = article['MedlineCitation']['Article']['Journal']['Title']
-        # getting the url
-        pmid = article['MedlineCitation']['PMID']['#text']
-        url = "https://ncbi.nlm.nih.gov/pubmed/" + pmid
-        # getting author names
-        try:
-            author = article['MedlineCitation']['Article']['AuthorList']['Author']
-            authorName = author['Initials'] + ". " + author['LastName']
-            authors.append(authorName)
-        except:
-            try:
-                for author in article['MedlineCitation']['Article']['AuthorList']['Author']:
+            root = ET.fromstring(xml)
+            for pmarticle in root:
+                article = pmarticle.find('MedlineCitation').find('Article')
+                title = article.find('ArticleTitle').text
+                journal = article.find('Journal').find('Title').text
+                url = 'https://ncbi.nlm.nih.gov/pubmed/' + pmarticle.find('MedlineCitation').find('PMID').text
+
+                doi_tag = pmarticle.find('PubmedData').find('ArticleIdList').findall('ArticleId')
+                for tag in doi_tag:
+                    if 'doi' in tag.attrib.values():
+                        doi = tag.text
+                
+                paperTypesList = []
+                paperTypes = article.find('PublicationTypeList').findall('PublicationType')
+                for element in paperTypes:
+                    paperTypesList.append(element.text)
+                paperType = ', '.join(paperTypesList)
+
+                allAbstracts = []
+                abstract_tag = article.find('Abstract').findall('AbstractText')
+                for abstractText in abstract_tag:
+                    for text in abstractText.itertext():
+                        allAbstracts.append(text.strip())
+                abstract = ' '.join(allAbstracts)
+
+                authors = []
+                authorlist_tag = article.find('AuthorList').findall('Author')
+                for author in authorlist_tag:
                     try:
-                        authorName = author['Initials'] + \
-                            ". " + author['LastName']
-                        authors.append(authorName)
+                        initial = author.find('Initials').text
+                        last = author.find('LastName').text
+                        name = "{}. {}".format(initial, last)
+                        authors.append(name)
                     except:
                         pass
-            except:
-                pass
-        # getting year published
-        pubYear = ""
-        pubMonth = ""
-        pubDay = ""
-        try:
-            pubYear = article['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate']['Year']
-        except:
-            pubYear = None
-        try:
-            pubMonth = article['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate']['Month']
-        except:
-            pubMonth = None
-        try:
-            pubDay = article['MedlineCitation']['Article']['Journal']['JournalIssue']['PubDate']['Day']
-        except:
-            pubDay = None
-        pubDate = {
-            'year': pubYear,
-            'month': pubMonth,
-            'day': pubDay,
-        }
-        # getting abstract
-        try:
-            abTexts = article['MedlineCitation']['Article']['Abstract']['AbstractText']
-        except:
-            abstract = None
-        try:
-            abstract = ""
-            for abText in abTexts:
-                abstract += abText['#text']
-        except:
-            pass
-        try:
-            abstract = ""
-            abstract += abTexts['#text']
-        except:
-            pass
-        try:
-            abstract = ""
-            abstract += abTexts
-        except:
-            abstract = None
-        
-        result = {
-            'title': title,
-            'url': url,
-            'pubDate': pubDate,
-            'journal': journal,
-            'abstract': abstract,
-            'authors': authors,
-            'database': 'PubMed',
-        }
-        results.append(result)
-    results = {
-        'results': results
-    }
-    # this does not work with 1
-    return results
+
+                
+                try:
+                    keywords = []
+                    keywordlist = pmarticle.find('MedlineCitation').find('KeywordList').findall('Keyword')
+                    for word in keywordlist:
+                        keywords.append(word.text.strip('\n'))
+                except:
+                    # no keywords
+                    pass
+
+                #CHECK ARTICLEDATE, IF IT DOESN'T EXIST, THEN CHECK <PubDate> AND GET ALL INFO
+                try:
+                    pubDate_y = article.find('ArticleDate')[0].text
+                    pubDate_m = article.find('ArticleDate')[1].text
+                    pubDate_d = article.find('ArticleDate')[2].text
+                    date_str = "{} {} {}".format(pubDate_m, pubDate_d, pubDate_y)
+                    pubDate = datetime.datetime.strptime(date_str, '%m %d %Y').strftime('%b %d %Y')
+                except:
+                    datelist = []
+                    pubDate_tag = article.find('Journal').find('JournalIssue').find('PubDate')
+                    for child in pubDate_tag:
+                        datelist.append(child.text)
+                    if len(datelist) > 1:
+                        pubDate = ' '.join(datelist)
+                    else:
+                        pubDate = datelist[0]
+
+                genes, variants = await find_genes(abstract)
+                gdc, pfc = await find_gdcpfc(abstract, genes, variants)
+
+
+                result = {
+                    'title': title,
+                    'url': url,
+                    'pubDate': pubDate,
+                    'journal': journal,
+                    'abstract': abstract,
+                    'authors': authors,
+                    'database': 'PubMed',
+                    'doi': doi,
+                    'paperType': paperType,
+                    'keywords': keywords,
+                    'gdc': gdc,
+                    'pfc': pfc,
+                    'genes': genes,
+                    'variants': variants
+                }
+                results.append(result)
+            
+            #final = {
+            #    'results': results
+            #}
+            return results
