@@ -37,16 +37,20 @@ class SciSearch(Resource):
 
         final_ppindex = []
         for entry in final_list:
-            gdc = entry['gdc']
-            pfc = entry['pfc']
-            year = re.findall("\d{4}", entry['pubDate'])[0]
-            yearsPassed = 2020 - (int(year) - 0.01)
-            ppIndex = pp_index(gdc, pfc, yearsPassed)
-            final_ppindex.append(ppIndex)
+            try:
+                gdc = entry['gdc']
+                pfc = entry['pfc']
+                year = re.findall("\d{4}", entry['pubDate'])[0]
+                yearsPassed = 2020 - (int(year) - 0.01)
+                ppIndex = pp_index(gdc, pfc, yearsPassed)
+                final_ppindex.append(ppIndex)
+            except:
+                #no result found (usually medRxiv)
+                pass
 
         normalized_pp = [x/mean(final_ppindex) for x in final_ppindex]
 
-        for i in range(len(final_list)):
+        for i in range(len(final_ppindex)):
             final_list[i]['ppindex'] = normalized_pp[i]
 
         final = {
