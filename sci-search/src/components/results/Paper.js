@@ -4,6 +4,7 @@ import { PageHeader, Button, Descriptions } from "antd";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 
 export class Paper extends Component {
+  
   state = {
     bookmarked: false
   };
@@ -20,30 +21,10 @@ export class Paper extends Component {
     return splitStr.join(" ");
   };
 
-  setBookmark = tempBookmark => {
-    this.props.addBookmark(tempBookmark);
-  };
-
-  delBookmark = id => {
-    this.props.removeBookmark(id);
-  };
-
-  onChange = e => {
-    this.setState({ bookmarked: !this.state.bookmarked });
-    console.log("Paper now: ", this.state.bookmarked);
-    if (this.state.bookmarked === true) {
-      this.delBookmark(this.props.results.ID);
-      console.log("Removed paper");
-    } else {
-      this.setBookmark(this.props.results);
-      console.log("Bookmarked paper: ", this.props.results.ID);
-    }
-  };
-
   render() {
     let abstractRender;
 
-    if (this.props.results.abstract) {
+    if (this.props.result.abstract) {
       abstractRender = (
         <Descriptions.Item
           span={6}
@@ -51,7 +32,7 @@ export class Paper extends Component {
           label="Abstract"
           style={{ abstractStyle }}
         >
-          {this.props.results.abstract.replace(
+          {this.props.result.abstract.replace(
             /(([^\s]+\s\s*){150})(.*)/,
             "$1…"
           )}
@@ -72,10 +53,10 @@ export class Paper extends Component {
 
     let journalRender;
 
-    if (this.props.results.journal) {
+    if (this.props.result.journal) {
       journalRender = (
         <Descriptions.Item label="Journal">
-          {this.journalCapitalizationCase(this.props.results.journal)}
+          {this.journalCapitalizationCase(this.props.result.journal)}
         </Descriptions.Item>
       );
     } else {
@@ -88,10 +69,10 @@ export class Paper extends Component {
 
     let keywordRender;
 
-    if (this.props.results.keywords) {
+    if (this.props.result.keywords) {
       keywordRender = (
         <Descriptions.Item label="Keywords">
-          {this.props.results.keywords.join(", ")}
+          {this.props.result.keywords.join(", ")}
         </Descriptions.Item>
       );
     } else {
@@ -104,10 +85,10 @@ export class Paper extends Component {
 
     let geneListRender;
 
-    if (this.props.results.genes) {
+    if (this.props.result.genes) {
       geneListRender = (
         <Descriptions.Item label="Genes">
-          {this.props.results.genes.map(gene => (
+          {this.props.result.genes.map(gene => (
             <Button size="small" key={gene}>
               {gene}
             </Button>
@@ -122,17 +103,17 @@ export class Paper extends Component {
 
     let dateRender;
 
-    if (this.props.results.UTCDatetime === null) {
+    if (this.props.result.UTCDatetime === null) {
       console.log("UTC null");
-      if (this.props.results.pubDate.year === null) {
+      if (this.props.result.pubDate.year === null) {
         dateRender = (
           <Descriptions.Item label="Date">Date not available</Descriptions.Item>
         );
-      } else if (this.props.results.pubDate.month === null) {
+      } else if (this.props.result.pubDate.month === null) {
         dateRender = (
           <Descriptions.Item label="Date">Date not available</Descriptions.Item>
         );
-      } else if (this.props.results.pubDate.day === null) {
+      } else if (this.props.result.pubDate.day === null) {
         dateRender = (
           <Descriptions.Item label="Date">Date not available</Descriptions.Item>
         );
@@ -140,11 +121,11 @@ export class Paper extends Component {
     } else {
       console.log(
         "Date is: ",
-        this.props.results.pubDate.day,
-        this.props.results.pubDate.month,
-        this.props.results.pubDate.year
+        this.props.result.pubDate.day,
+        this.props.result.pubDate.month,
+        this.props.result.pubDate.year
       );
-      const date = new Date(this.props.results.UTCDatetime);
+      const date = new Date(this.props.result.UTCDatetime);
       console.log(date);
 
       dateRender = (
@@ -162,11 +143,11 @@ export class Paper extends Component {
           title={
             <React.Fragment>
               <a
-                href={this.props.results.url}
+                href={this.props.result.url}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {this.props.results.title}
+                {this.props.result.title}
               </a>
               {this.state.bookmarked ? (
                 <Button type="link" onClick={this.onChange}>
@@ -179,13 +160,13 @@ export class Paper extends Component {
               )}
             </React.Fragment>
           }
-          subTitle={this.props.results.authors
+          subTitle={this.props.result.authors
             .join(", ")
             .replace(/(([^\s]+\s\s*){11})(.*)/, "$1et al.")}
           extra={[
             <Button key="go_paper_button" type="primary">
               <a
-                href={this.props.results.url}
+                href={this.props.result.url}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -198,7 +179,7 @@ export class Paper extends Component {
           <Descriptions column={3}>
             {dateRender}
             <Descriptions.Item label="Database">
-              {this.props.results.database}
+              {this.props.result.database}
             </Descriptions.Item>
             {journalRender}
           </Descriptions>
@@ -208,7 +189,7 @@ export class Paper extends Component {
           <Descriptions column={2}>{geneListRender}</Descriptions>
           <Descriptions column={1}>
             <Descriptions.Item label="Paper Priority Index">
-              <b>{this.props.results.ppindex}</b>
+              <b>{this.props.result.ppindex}</b>
             </Descriptions.Item>
           </Descriptions>
         </PageHeader>
@@ -220,7 +201,7 @@ export class Paper extends Component {
 export default Paper;
 
 Paper.propTypes = {
-  results: PropTypes.object.isRequired
+  result: PropTypes.object.isRequired
 };
 
 const paperStyle = {
