@@ -18,7 +18,8 @@ function Sidebar() {
     >
       <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
         <Menu.Item key="1">
-          <span>Bookmarked Papers</span>
+        <span>Bookmarked Papers</span>
+        <span>Joe mama</span>
         </Menu.Item>
       </Menu>
       <BookmarkList

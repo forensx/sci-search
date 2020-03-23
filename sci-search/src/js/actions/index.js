@@ -64,3 +64,19 @@ export function fetchPapersIfNeeded(query) {
     }
   };
 }
+
+export const BOOKMARK_PAPER = "BOOKMARK_PAPER";
+function bookmarkPaper(paperID) {
+  return {
+    type: BOOKMARK_PAPER,
+    paperID
+  };
+}
+
+export const REMOVE_BOOKMARK = "REMOVE_BOOKMARK";
+function removeBookmark(paperID) {
+  return {
+    type: REMOVE_BOOKMARK,
+    paperID
+  };
+}

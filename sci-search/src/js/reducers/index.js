@@ -3,7 +3,9 @@ import {
   SELECT_QUERY,
   REQUEST_PAPERS,
   INVALIDATE_PAPERS,
-  RECEIVE_PAPERS
+  RECEIVE_PAPERS,
+  BOOKMARK_PAPER,
+  REMOVE_BOOKMARK
 } from "../actions";
 
 function selectedQuery(state = null, action) {
@@ -58,9 +60,22 @@ function papersByquery(state = {}, action) {
   }
 }
 
+function manageBookmarks(state = {}, action) {
+  switch (action.type) {
+    case REMOVE_BOOKMARK:
+    case BOOKMARK_PAPER:
+      return Object.assign({}, state, {
+        [action.query]: papers(state[action.query], action)
+      });
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
   papersByquery,
-  selectedQuery
+  selectedQuery,
+  manageBookmarks
 });
 
 export default rootReducer;
