@@ -8,7 +8,7 @@ import json
 r = Rake(min_length = 2, max_length = 6)
 
 async def find_genes(abstract):
-    genes_found = re.findall("[A-Z]+[-]?[0-9]?[A-Z]*[0-9]?(?![a-z!@#$%^&*(.?\":{}|<>])", abstract)
+    genes_found = re.findall("(?![a-z!@#$%^&*(.?\":{}|<>])[A-Z]+[-]?[0-9]?[A-Z]*[0-9]?", abstract)
     genes = [x for x in genes_found if len(x) > 2 and len(x) < 7 and x != "DNA" and x != "RNA"]
     genes_unique = sorted(np.unique(genes), key = genes.count)[::-1][0:4]
     variants_found = re.findall("\brs[0-9]*\b", abstract)
@@ -22,11 +22,11 @@ async def find_gdcpfc(abstract, genes, variants):
     async with aiohttp.ClientSession() as session:
 
         if len(genes) != 0:
-            async with session.get('https://www.disgenet.org/api/gda/gene/{}'.format(gene),     params = {'format': 'json', 'limit': 100}) as resp:
+            async with session.get('https://www.disgenet.org/api/gda/gene/{}'.format(gene), params = {'format': 'json', 'limit': 100}) as resp:
                 diseasejson = await resp.json()
                 try:
                     for disease in diseasejson:
-                        diseaseNames = [x for x in disease['disease_name'].split(" ") if len(x)     > 3]
+                        diseaseNames = [x for x in disease['disease_name'].split(" ") if len(x) > 3]
                         for diseaseName in diseaseNames:
                             if diseaseName in abstract:
                                 gdc += 1

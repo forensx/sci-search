@@ -10,8 +10,12 @@
             "database": "",
             "doi": "", 
             "paperType": "",
-            "keywords": []
-            //Lead author uni affiliation, type of paper (journal article, review article)
+            "keywords": [],
+            "gdc": 0,
+            "pfc": 0,
+            "genes": [],
+            "variants": [],
+            "ppindex": 0
         }
     ]
 }

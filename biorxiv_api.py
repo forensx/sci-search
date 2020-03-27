@@ -32,9 +32,18 @@ async def biorxiv(query, number):
         async with aiohttp.ClientSession() as session:
             async with session.get(base, params = SEARCH_PARAMS, headers = headers) as resp:
                 data = await resp.json()
+
+                if not data['results']:
+                    final_noresult = [{
+                        'database': 'bioRxiv',
+                        'error': 'No results found'
+                    }]
+                    return final_noresult
+
                 ids = []
                 for paper in data['results']:
                     ids.append(paper['id'])
+                
 
                 for article in ids:
                     detail = await fetch_papers(article)

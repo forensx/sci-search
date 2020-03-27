@@ -28,8 +28,6 @@ class SciSearch(Resource):
         result = loop.run_until_complete(asyncio.gather(biorxiv(search_param, numResults), pubmed(search_param, numResults), medrxiv(search_param, numResults)))
         #result = loop.run_until_complete(asyncio.gather(biorxiv(search_param, numResults),#pubmed(search_param, numResults)))
 
-        
-
         final_list = []
         for element in result:
             for papers in element:
@@ -45,10 +43,14 @@ class SciSearch(Resource):
                 ppIndex = pp_index(gdc, pfc, yearsPassed)
                 final_ppindex.append(ppIndex)
             except:
-                #no result found (usually medRxiv)
+                #no results found (usually medRxiv or bioRxiv when down)
+                final_ppindex.append(0)
                 pass
-
-        normalized_pp = [x/mean(final_ppindex) for x in final_ppindex]
+            
+        if mean(final_ppindex) == 0:
+            normalized_pp = final_ppindex
+        else:
+            normalized_pp = [x/mean(final_ppindex) for x in final_ppindex]
 
         for i in range(len(final_ppindex)):
             final_list[i]['ppindex'] = normalized_pp[i]
