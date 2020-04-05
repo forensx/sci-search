@@ -111,7 +111,7 @@ async def pubmed(query, number):
                     pubDate_m = article.find('ArticleDate')[1].text
                     pubDate_d = article.find('ArticleDate')[2].text
                     date_str = "{} {} {}".format(pubDate_m, pubDate_d, pubDate_y)
-                    pubDate = datetime.datetime.strptime(date_str, '%m %d %Y').strftime('%b %d %Y')
+                    pubDate = datetime.datetime.strptime(date_str, '%m %d %Y').strftime('%Y-%m-%d %H:%M:%S')
                 except:
                     datelist = []
                     pubDate_tag = article.find('Journal').find('JournalIssue').find('PubDate')

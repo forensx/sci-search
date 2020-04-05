@@ -37,7 +37,6 @@ async def getpageinfo(query, page):
                 #getting pubDate
                 pubDate = page_entry.find_all("div", attrs = {"class": "pane-content"})[10]
                 pubDate = str(dparser.parse(pubDate, fuzzy = True))
-                pubDate = datetime.datetime.strptime(pubDate, '%Y-%m-%d %H:%M:%S').strftime('%b %d %Y')
 
                 #getting title
                 title = page_entry.find("h1", attrs={"class": "highwire-cite-title"}).text
