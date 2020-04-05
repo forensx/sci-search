@@ -33,14 +33,20 @@ export default function Paper(props) {
             {bookmarked ? (
               <Button
                 type="link"
-                onClick={(onBookmark(props.result.ID), setBookmarked)}
+                onClick={(event) => {
+                  onBookmark(props.result.ID);
+                  setBookmarked(false);
+                }}
               >
                 <StarFilled />
               </Button>
             ) : (
               <Button
                 type="link"
-                onClick={(onBookmark(props.result.ID), setBookmarked)}
+                onClick={(event) => {
+                  onBookmark(props.result.ID);
+                  setBookmarked(true);
+                }}
               >
                 <StarOutlined />
               </Button>
