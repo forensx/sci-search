@@ -9,6 +9,10 @@ import Genes from "./PaperComponents/Genes";
 import PaperDate from "./PaperComponents/PaperDate";
 import PPIndex from "./PaperComponents/PPIndex";
 
+function onBookmark(paperID) {
+  console.log("PAPER BOOKMARK ID: ", paperID);
+}
+
 export default function Paper(props) {
   const [bookmarked, setBookmarked] = useState(false);
 
@@ -27,11 +31,17 @@ export default function Paper(props) {
               {props.result.title}
             </a>
             {bookmarked ? (
-              <Button type="link">
+              <Button
+                type="link"
+                onClick={(onBookmark(props.result.ID), setBookmarked)}
+              >
                 <StarFilled />
               </Button>
             ) : (
-              <Button type="link">
+              <Button
+                type="link"
+                onClick={(onBookmark(props.result.ID), setBookmarked)}
+              >
                 <StarOutlined />
               </Button>
             )}
@@ -65,9 +75,9 @@ export default function Paper(props) {
         <Descriptions column={3}>
           <Descriptions.Item label="Publication Date">
             <PaperDate
-                UTCDatetime={props.result.UTCDatetime}
-                pubDate={props.result.pubDate}
-              />
+              UTCDatetime={props.result.UTCDatetime}
+              pubDate={props.result.pubDate}
+            />
           </Descriptions.Item>
           <Descriptions.Item label="Database">
             {props.result.database}
@@ -88,7 +98,7 @@ export default function Paper(props) {
         </Descriptions>
         <Descriptions column={1}>
           <Descriptions.Item label="Paper Priority Index">
-            <PPIndex ppindex={props.result.ppindex} />
+            <PPIndex ppindex={props.result.ppindex.toFixed(3)} />
           </Descriptions.Item>
         </Descriptions>
       </PageHeader>
