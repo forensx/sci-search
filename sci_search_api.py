@@ -25,9 +25,10 @@ class SciSearch(Resource):
     def get(self, search_param, numResults):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        
-        result = loop.run_until_complete(asyncio.gather(biorxiv(search_param, numResults), pubmed(search_param, numResults), medrxiv(search_param, numResults)))
-        #result = loop.run_until_complete(asyncio.gather(biorxiv(search_param, numResults),#pubmed(search_param, numResults)))
+
+        #result = loop.run_until_complete(asyncio.gather(biorxiv(search_param, numResults), pubmed(search_param, numResults), medrxiv(search_param, numResults)))
+        result = loop.run_until_complete(asyncio.gather(
+            biorxiv(search_param, numResults), pubmed(search_param, numResults)))
 
         final_list = []
         for element in result:
@@ -44,10 +45,10 @@ class SciSearch(Resource):
                 ppIndex = pp_index(gdc, pfc, yearsPassed)
                 final_ppindex.append(ppIndex)
             except:
-                #no results found (usually medRxiv or bioRxiv when down)
+                # no results found (usually medRxiv or bioRxiv when down)
                 final_ppindex.append(0)
                 pass
-            
+
         if mean(final_ppindex) == 0:
             normalized_pp = final_ppindex
         else:
@@ -57,8 +58,8 @@ class SciSearch(Resource):
             final_list[i]['ppindex'] = normalized_pp[i]
             final_list[i]['ID'] = uuid.uuid4()
 
+        # return serialized JSON
         return jsonify({'results': final_list})
-
 
 
 if __name__ == "__main__":

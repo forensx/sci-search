@@ -6,12 +6,12 @@ import { Spin } from "antd";
 import { LoadingOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import Paper from "./Paper";
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   currentSearch: state.selectedQuery,
-  searchResults: state.papersByquery
-});
+  searchResults: state.papersByquery,
+}); // connect props to state store in Redux
 
-class ResultListWrap extends Component {
+class ResultListWrapper extends Component {
   constructor(props) {
     super(props);
     this.loadingRender = this.loadingRender.bind(this);
@@ -30,7 +30,7 @@ class ResultListWrap extends Component {
     ) {
       return (
         <Result
-          title="Your search has been executed"
+          title="Finding the most relevant results!"
           icon={
             <Spin
               size="large"
@@ -44,7 +44,9 @@ class ResultListWrap extends Component {
         "papers"
       ].sort((a, b) => (a.ppindex > b.ppindex ? -1 : 1));
       console.log("Sorted papers: ", paperList);
-      return paperList.map(result => <Paper result={result} key={result.ID} />);
+      return paperList.map((result) => (
+        <Paper result={result} key={result.ID} />
+      ));
     }
   }
 
@@ -53,5 +55,5 @@ class ResultListWrap extends Component {
   }
 }
 
-const ResultList = connect(mapStateToProps)(ResultListWrap);
-export default ResultList;
+const ResultList = connect(mapStateToProps)(ResultListWrapper); // connect to Redux state
+export default ResultList; // this is the component that is used in App
