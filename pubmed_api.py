@@ -58,11 +58,16 @@ async def pubmed(query, number):
                 id_list = id_list[0]
             
             xml = await fetch_papers(id_list)
-
             root = ET.fromstring(xml)
             for pmarticle in root:
                 article = pmarticle.find('MedlineCitation').find('Article')
-                title = article.find('ArticleTitle').text
+
+                allTitles = []
+                titles_tag = article.find('ArticleTitle')
+                for text in titles_tag.itertext():
+                    allTitles.append(text.strip())
+                title = ' '.join(allTitles)
+
                 journal = article.find('Journal').find('Title').text
                 url = 'https://ncbi.nlm.nih.gov/pubmed/' + pmarticle.find('MedlineCitation').find('PMID').text
 
