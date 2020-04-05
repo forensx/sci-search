@@ -69,7 +69,7 @@ async def biorxiv(query, number):
                     gdc, pfc = await find_gdcpfc(abstract, genes, variants)
                     
                     date = detail['first_posted']
-                    pubDate = datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%b %d %Y')
+                    pubDate = datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d %H:%M:%S')
 
                     authors = []
                     for author in detail['authors']:

@@ -14,6 +14,7 @@ import numpy as np
 import asyncio
 import re
 from metrics import pp_index
+import uuid
 
 app = Flask(__name__)
 api = Api(app)
@@ -54,11 +55,9 @@ class SciSearch(Resource):
 
         for i in range(len(final_ppindex)):
             final_list[i]['ppindex'] = normalized_pp[i]
+            final_list[i]['ID'] = uuid.uuid4()
 
-        final = {
-            'results': final_list
-        }
-        return final
+        return jsonify({'results': final_list})
 
 
 
