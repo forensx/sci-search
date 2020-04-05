@@ -4,7 +4,7 @@ import {
   REQUEST_PAPERS,
   INVALIDATE_PAPERS,
   RECEIVE_PAPERS,
-  BOOKMARK_PAPER,
+  ADD_BOOKMARK,
   REMOVE_BOOKMARK
 } from "../actions";
 
@@ -60,12 +60,27 @@ function papersByquery(state = {}, action) {
   }
 }
 
+function bookmarks(
+  state = {
+    bookmarks: []
+  },
+  action
+) {
+  switch (action.type) {
+    case ADD_BOOKMARK:
+      console.log("Paper logged: ", action.paperID)
+      return state;
+    default:
+      return state;
+  }
+}
+
 function manageBookmarks(state = {}, action) {
   switch (action.type) {
     case REMOVE_BOOKMARK:
-    case BOOKMARK_PAPER:
+    case ADD_BOOKMARK:
       return Object.assign({}, state, {
-        [action.query]: papers(state[action.query], action)
+        [action.query]: bookmarks(state[action.query], action)
       });
     default:
       return state;

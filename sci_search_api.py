@@ -25,8 +25,8 @@ class SciSearch(Resource):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         
-        result = loop.run_until_complete(asyncio.gather(biorxiv(search_param, numResults), pubmed(search_param, numResults), medrxiv(search_param, numResults)))
-        #result = loop.run_until_complete(asyncio.gather(biorxiv(search_param, numResults),#pubmed(search_param, numResults)))
+        #result = loop.run_until_complete(asyncio.gather(biorxiv(search_param, numResults), pubmed(search_param, numResults), medrxiv(search_param, numResults)))
+        result = loop.run_until_complete(asyncio.gather(biorxiv(search_param, numResults),pubmed(search_param, numResults)))
 
         final_list = []
         for element in result:

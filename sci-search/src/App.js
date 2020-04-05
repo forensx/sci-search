@@ -2,15 +2,9 @@ import React, { Component } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
 import ResultList from "./components/results/ResultList";
-import { Layout, Menu } from "antd";
+import { Layout } from "antd";
 import "antd/dist/antd.css";
 import Search from "./components/Search";
-import BookmarkList from "./components/bookmarks/BookmarkList";
-import { search_api } from "./components/DataFunctions";
-import { Result } from "antd";
-import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
-import { message } from "antd";
 import Sidebar from "./components/Sidebar";
 const { Header, Content } = Layout;
 

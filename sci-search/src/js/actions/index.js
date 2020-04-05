@@ -1,5 +1,4 @@
 export const SELECT_QUERY = "SELECT_QUERY";
-
 export function selectQuery(query) {
   return {
     type: SELECT_QUERY,
@@ -65,16 +64,16 @@ export function fetchPapersIfNeeded(query) {
   };
 }
 
-export const BOOKMARK_PAPER = "BOOKMARK_PAPER";
-function bookmarkPaper(paperID) {
+export const ADD_BOOKMARK = "ADD_BOOKMARK";
+export function addBookmark(paperID) {
   return {
-    type: BOOKMARK_PAPER,
+    type: ADD_BOOKMARK,
     paperID
   };
 }
 
 export const REMOVE_BOOKMARK = "REMOVE_BOOKMARK";
-function removeBookmark(paperID) {
+export function removeBookmark(paperID) {
   return {
     type: REMOVE_BOOKMARK,
     paperID
