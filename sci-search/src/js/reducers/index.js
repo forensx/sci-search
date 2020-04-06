@@ -5,7 +5,7 @@ import {
   REQUEST_PAPERS,
   INVALIDATE_PAPERS,
   RECEIVE_PAPERS,
-  ADD_BOOKMARK,
+  ADD_BOOKMARK_NEW_CASE,
   REMOVE_BOOKMARK,
 } from "../actions";
 
@@ -72,7 +72,7 @@ function bookmarks(
   action
 ) {
   switch (action.type) {
-    case ADD_BOOKMARK:
+    case ADD_BOOKMARK_NEW_CASE:
       console.log("Paper bookmarked from Redux: ", action.paper.paperID);
       return Object.assign({}, state, {
         bookmarks: action.paper,
@@ -85,15 +85,12 @@ function bookmarks(
 }
 
 // handle state management of entire bookmarkByCase system
-function bookmarksByCase(state = [], action) {
+function bookmarksByCase(state = {}, action) {
   switch (action.type) {
     case REMOVE_BOOKMARK:
-    case ADD_BOOKMARK:
+    case ADD_BOOKMARK_NEW_CASE:
       return Object.assign({}, state, {
-        [action.caseName]: [
-          ...state[action.caseName],
-          bookmarks(state[action.caseName], action),
-        ],
+        [action.caseName]: [bookmarks(state[action.caseName], action)],
       });
     default:
       return state;

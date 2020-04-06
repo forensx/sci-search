@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { PageHeader, Button, Descriptions } from "antd";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { addBookmark, removeBookmark } from "../../js/actions";
+import { addBookmark_newCase, removeBookmark } from "../../js/actions";
 import Abstract from "./PaperComponents/Abstract";
 import Journal from "./PaperComponents/Journal";
 import Keywords from "./PaperComponents/Keywords";
@@ -18,7 +18,7 @@ export default function Paper(props) {
   const dispatch = useDispatch();
   const onBookmark = paperID => {
     console.log("PAPER BOOKMARK ID FROM COMPONENT: ", paperID);
-    dispatch(addBookmark(paperID, "BRCA SEARCH"));
+    dispatch(addBookmark_newCase(paperID, "BRCA SEARCH"));
   };
 
   return (
