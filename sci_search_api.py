@@ -57,6 +57,7 @@ class SciSearch(Resource):
         for i in range(len(final_ppindex)):
             final_list[i]['ppindex'] = normalized_pp[i]
             final_list[i]['ID'] = uuid.uuid4()
+            final_list[i]['doi'] = "https://doi.org/" + final_list[i]['doi']
 
         # return serialized JSON
         return jsonify({'results': final_list})
