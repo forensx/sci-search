@@ -1,3 +1,4 @@
+// SEARCH SYSTEM
 export const SELECT_QUERY = "SELECT_QUERY";
 export function selectQuery(query) {
   return {
@@ -63,19 +64,25 @@ export function fetchPapersIfNeeded(query) {
     }
   };
 }
+// END SEARCH SYSTEM
 
+// BOOKMARKS SYSTEM
 export const ADD_BOOKMARK = "ADD_BOOKMARK";
-export function addBookmark(paperID) {
+export function addBookmark(paper, caseName) {
   return {
     type: ADD_BOOKMARK,
-    paperID
+    paper,
+    caseName,
+    receivedAt: Date.now()
   };
 }
 
 export const REMOVE_BOOKMARK = "REMOVE_BOOKMARK";
-export function removeBookmark(paperID) {
+export function removeBookmark(paper, caseName) {
   return {
     type: REMOVE_BOOKMARK,
-    paperID
+    paper,
+    caseName,
+    receivedAt: Date.now()
   };
 }

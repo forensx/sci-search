@@ -2,19 +2,24 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { PageHeader, Button, Descriptions } from "antd";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { addBookmark, removeBookmark } from "../../js/actions";
 import Abstract from "./PaperComponents/Abstract";
 import Journal from "./PaperComponents/Journal";
 import Keywords from "./PaperComponents/Keywords";
 import Genes from "./PaperComponents/Genes";
 import PaperDate from "./PaperComponents/PaperDate";
 import PPIndex from "./PaperComponents/PPIndex";
-
-function onBookmark(paperID) {
-  console.log("PAPER BOOKMARK ID: ", paperID);
-}
+import BookmarkSelector from './PaperComponents/BookmarkSelector'
 
 export default function Paper(props) {
   const [bookmarked, setBookmarked] = useState(false);
+
+  const dispatch = useDispatch();
+  const onBookmark = paperID => {
+    console.log("PAPER BOOKMARK ID FROM COMPONENT: ", paperID);
+    dispatch(addBookmark(paperID, "BRCA SEARCH"));
+  };
 
   return (
     <div className="PaperHeader" style={paperStyle}>
@@ -34,7 +39,7 @@ export default function Paper(props) {
               <Button
                 type="link"
                 onClick={(event) => {
-                  onBookmark(props.result.ID);
+                  onBookmark(props.result);
                   setBookmarked(false);
                 }}
               >
@@ -44,7 +49,7 @@ export default function Paper(props) {
               <Button
                 type="link"
                 onClick={(event) => {
-                  onBookmark(props.result.ID);
+                  onBookmark(props.result);
                   setBookmarked(true);
                 }}
               >
@@ -102,9 +107,12 @@ export default function Paper(props) {
             <Genes genes={props.result.genes} />
           </Descriptions.Item>
         </Descriptions>
-        <Descriptions column={1}>
+        <Descriptions column={2}>
           <Descriptions.Item label="Paper Priority Index">
             <PPIndex ppindex={props.result.ppindex.toFixed(3)} />
+          </Descriptions.Item>
+          <Descriptions.Item label="Bookmark this Paper">
+            <BookmarkSelector />
           </Descriptions.Item>
         </Descriptions>
       </PageHeader>

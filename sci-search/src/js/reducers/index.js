@@ -1,11 +1,12 @@
 import { combineReducers } from "redux";
+import { v4 as uuidv4 } from "uuid";
 import {
   SELECT_QUERY,
   REQUEST_PAPERS,
   INVALIDATE_PAPERS,
   RECEIVE_PAPERS,
   ADD_BOOKMARK,
-  REMOVE_BOOKMARK
+  REMOVE_BOOKMARK,
 } from "../actions";
 
 function selectedQuery(state = null, action) {
@@ -21,26 +22,29 @@ function papers(
   state = {
     isFetching: false,
     didInvalidate: false,
-    papers: []
+    papers: [],
   },
   action
 ) {
   switch (action.type) {
     case INVALIDATE_PAPERS:
       return Object.assign({}, state, {
-        didInvalidate: true
+        didInvalidate: true,
+        ID: uuidv4(),
       });
     case REQUEST_PAPERS:
       return Object.assign({}, state, {
         isFetching: true,
-        didInvalidate: false
+        didInvalidate: false,
+        ID: uuidv4(),
       });
     case RECEIVE_PAPERS:
       return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
         papers: action.papers,
-        lastUpdated: action.receivedAt
+        lastUpdated: action.receivedAt,
+        ID: uuidv4(),
       });
     default:
       return state;
@@ -53,34 +57,43 @@ function papersByquery(state = {}, action) {
     case RECEIVE_PAPERS:
     case REQUEST_PAPERS:
       return Object.assign({}, state, {
-        [action.query]: papers(state[action.query], action)
+        [action.query]: papers(state[action.query], action),
       });
     default:
       return state;
   }
 }
 
+// manage individual bookmark logic
 function bookmarks(
   state = {
-    bookmarks: []
+    papersBookmarked: [],
   },
   action
 ) {
   switch (action.type) {
     case ADD_BOOKMARK:
-      console.log("Paper logged: ", action.paperID)
-      return state;
+      console.log("Paper bookmarked from Redux: ", action.paper.paperID);
+      return Object.assign({}, state, {
+        bookmarks: action.paper,
+        lastUpdated: action.receivedAt,
+        ID: uuidv4(),
+      });
     default:
       return state;
   }
 }
 
-function manageBookmarks(state = {}, action) {
+// handle state management of entire bookmarkByCase system
+function bookmarksByCase(state = [], action) {
   switch (action.type) {
     case REMOVE_BOOKMARK:
     case ADD_BOOKMARK:
       return Object.assign({}, state, {
-        [action.query]: bookmarks(state[action.query], action)
+        [action.caseName]: [
+          ...state[action.caseName],
+          bookmarks(state[action.caseName], action),
+        ],
       });
     default:
       return state;
@@ -90,7 +103,7 @@ function manageBookmarks(state = {}, action) {
 const rootReducer = combineReducers({
   papersByquery,
   selectedQuery,
-  manageBookmarks
+  bookmarksByCase,
 });
 
 export default rootReducer;
