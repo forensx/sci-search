@@ -84,7 +84,7 @@ export default function Paper(props) {
             label="Abstract"
             style={{ abstractStyle }}
           >
-            <div style = {{textAlign: "justify"}}>
+            <div style={{ textAlign: "justify" }}>
               <Abstract abstract={props.result.abstract} />
             </div>
           </Descriptions.Item>
