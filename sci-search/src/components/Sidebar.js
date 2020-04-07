@@ -1,34 +1,56 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Layout, Menu } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-//import { sidebarToggle } from "../js/actions/index";
-import BookmarkList from "./bookmarks/BookmarkList";
-import CiteExport from "./bookmarks/CiteExport";
 const { Sider } = Layout;
+const { SubMenu } = Menu;
 
-function Sidebar() {
-  const bookmarks = [];
-  //const sidebarCollapsed = useSelector(state => state.sidebar.sidebarCollapsed);
-  //const dispatch = useDispatch();
+// 1. Get all cases with bookmarks
+// 2. Iterate through cases
+// 3. Iterate through bookmarks
+// 4. Retrieve bookmark paper details in console.log()
 
-  return (
-    <Sider
-      collapsible
-      //collapsed={sidebarCollapsed}
-      //onCollapse={() => dispatch(sidebarToggle(!sidebarCollapsed))}
-    >
-      <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-        <Menu.Item key="1">
-        <span>Bookmarked Papers</span>
-        </Menu.Item>
-      </Menu>
-      <BookmarkList
-        bookmarks={bookmarks}
-        style={{ padding: "0%", margin: "0%" }}
-      />
-      <CiteExport style={{ padding: "0%", margin: "0%" }}/>
-    </Sider>
-  );
+const mapStateToProps = (state) => ({
+  allCases: state.bookmarksByCase,
+}); // connect props to state store in Redux
+
+class SidebarWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    const userCases = Object.keys(this.props.allCases);
+    return (
+      <div>
+        <Sider collapsible>
+          <Menu
+            theme="dark"
+            defaultSelectedKeys="miscExplanationHeader"
+            mode="inline"
+          >
+            {userCases
+              ? userCases.map((result) => (
+                  <SubMenu
+                    key={this.props.allCases[result].ID}
+                    title={
+                      <span>
+                        <span>{result}</span>
+                      </span>
+                    }
+                  >
+                    {this.props.allCases[result].bookmarks.map((bookmark) => (
+                      <Menu.Item key={bookmark.ID}>{bookmark.title}</Menu.Item>
+                    ))}
+                  </SubMenu>
+                ))
+              : null}
+          </Menu>
+        </Sider>
+      </div>
+    );
+  }
 }
 
-export default Sidebar;
+const Sidebar = connect(mapStateToProps)(SidebarWrapper); // connect to Redux state
+export default Sidebar; // this is the component that is used in App

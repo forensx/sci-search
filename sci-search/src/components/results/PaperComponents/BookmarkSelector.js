@@ -1,39 +1,84 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Menu, Dropdown, Button, message, Tooltip } from "antd";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { addBookmark } from "../../../js/actions";
+import { Menu, Dropdown, Button, message } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 
-//LOGIC DOCUMENTATION:
-// IF CASES, THEN POPULATE. ELSE, ONLY POPULATE WITH USER INPUT (HANDLE IN caseChoices LOGIC)
-// UPON CLICK, ADD PAPER TO RESPECTIVE CASE (HANDLE IN handleMenuClick LOGIC)
-// UPON CLICK ENTER, ADD PAPER TO NEW CASE IF USER INPUT (HANDLE IN handleMenuClick LOGIC)
+const mapStateToProps = (state, ownProps) => ({
+  allCases: state.bookmarksByCase,
+  paper: ownProps.paper,
+}); // connect props to state store in Redux
 
-function handleMenuClick(e) {
-  message.info("Click on menu item.");
-  console.log("click", e);
+class BookmarkSelectorWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+    };
+    this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleVisibleChange = this.handleVisibleChange.bind(this);
+    this.handleNewUserCase = this.handleNewUserCase.bind(this);
+  }
+
+  handleMenuClick = (e) => {
+    const { dispatch, paper } = this.props;
+    if (e.key === "caseUserInput") {
+      this.setState({ visible: true });
+    } else {
+      // second parameter is second delay for popup message
+      message.success('Paper bookmarked to ' + e.key + "!", 1);
+      dispatch(addBookmark(paper, e.key));
+      this.setState({ visible: true });
+    }
+  };
+
+  handleVisibleChange = (flag) => {
+    this.setState({ visible: flag });
+  };
+
+  handleNewUserCase = (e) => {
+    const { dispatch, paper } = this.props;
+    if (e.key === "Enter") {
+      message.success('Paper bookmarked to ' + e.target.value + "!", 1);
+      dispatch(addBookmark(paper, e.target.value));
+    }
+  };
+
+  render() {
+    const caseChoices = (allCases) => (
+      <Menu
+        onClick={this.handleMenuClick} // pass paper
+      >
+        {allCases
+          ? allCases.map((result) => (
+              <Menu.Item key={result}>{result}</Menu.Item>
+            ))
+          : null}
+        <Menu.Item key="caseUserInput">
+          <Input
+            placeholder="Create new case"
+            onKeyDown={this.handleNewUserCase} // pass paper
+            id="userNewCaseInput"
+          />
+        </Menu.Item>
+      </Menu>
+    );
+    return (
+      <div>
+        <Dropdown
+          onVisibleChange={this.handleVisibleChange}
+          visible={this.state.visible}
+          overlay={caseChoices(Object.keys(this.props.allCases))}
+        >
+          <Button>
+            Select a study <DownOutlined />
+          </Button>
+        </Dropdown>
+      </div>
+    );
+  }
 }
 
-const caseChoices = (allCases) => (
-  <Menu onClick={handleMenuClick}>
-    <Menu.Item key="caseUserInput">
-      <Input placeholder="Create new case" />
-    </Menu.Item>
-  </Menu>
-);
-
-export default function BookmarkSelector() {
-  const allCases = useSelector((state) => state.bookmarksByCase);
-  const numCases = Object.keys(allCases).length;
-  console.log("Number of cases", numCases);
-
-  return (
-    <div>
-      <Dropdown overlay={caseChoices(allCases)}>
-        <Button>
-          Select a study <DownOutlined />
-        </Button>
-      </Dropdown>
-    </div>
-  );
-}
+const BookmarkSelector = connect(mapStateToProps)(BookmarkSelectorWrapper); // connect to Redux state
+export default BookmarkSelector; // this is the component that is used in App
