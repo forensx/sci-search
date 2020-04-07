@@ -5,43 +5,16 @@ import CiteExport from "./bookmarks/CiteExport";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-// 1. Get all cases with bookmarks
-// 2. Iterate through cases
-// 3. Iterate through bookmarks
-// 4. Retrieve bookmark paper details in console.log()
-
 const mapStateToProps = (state) => ({
   allCases: state.bookmarksByCase,
 }); // connect props to state store in Redux
-
 class SidebarWrapper extends Component {
   constructor(props) {
     super(props);
-    this.state = { caseRender: "" };
-    this.handleMenuClick = this.handleMenuClick.bind(this);
-    this.handleNewUserCase = this.handleNewUserCase.bind(this);
+    this.state = { caseRender: null };
   }
-
   handleMenuClick = (e) => {
-    const { dispatch } = this.props;
-    if (e.key === "caseUserInput") {
-      this.setState({ visible: true });
-      console.log("User clicked: ", e.key);
-    } else {
-      this.setState({ caseRender: e.key, visible: false });
-      console.log("User clicked: ", e.key);
-    }
-  };
-
-  handleVisibleChange = (flag) => {
-    this.setState({ visible: flag });
-  };
-
-  handleNewUserCase = (e) => {
-    const { dispatch } = this.props;
-    if (e.key === "Enter") {
-      message.success("Case " + e.target.value + "created!", 1);
-    }
+    this.setState({ caseRender: e.key, visible: true });
   };
 
   render() {
@@ -54,16 +27,13 @@ class SidebarWrapper extends Component {
             defaultSelectedKeys="miscExplanationHeader"
             mode="vertical"
             style={{ background: "#002140", minHeight: "84vh" }}
-            onClick={this.handleMenuClick}
-            visible={this.state.visible}
           >
             <SubMenu
-              key="chooseCaseHeader"
-              visible={this.state.visible}
+              key="sub1"
               title={
-                <span>
-                  <span>Choose a case</span>
-                </span>
+                this.state.caseRender
+                  ? "Viewing: " + this.state.caseRender
+                  : "Choose a case"
               }
             >
               <Menu.ItemGroup>
@@ -88,7 +58,15 @@ class SidebarWrapper extends Component {
                         /(([^\s]+\s\s*){5})(.*)/,
                         "$1…"
                       )}
-                      extra={<a href={bookmark.doi}>Paper link</a>}
+                      extra={
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={bookmark.url}
+                        >
+                          Paper link
+                        </a>
+                      }
                       style={{ marginTop: "2px" }}
                     >
                       <p>
@@ -102,12 +80,11 @@ class SidebarWrapper extends Component {
                 )
               : null}
           </Menu>
-          <CiteExport/>
+          <CiteExport caseNameProp={this.state.caseRender} />
         </Sider>
       </div>
     );
   }
 }
-
 const Sidebar = connect(mapStateToProps)(SidebarWrapper); // connect to Redux state
 export default Sidebar; // this is the component that is used in App
