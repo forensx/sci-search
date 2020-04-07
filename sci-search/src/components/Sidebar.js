@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Layout, Menu } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-//import { sidebarToggle } from "../js/actions/index";
-import BookmarkList from "./bookmarks/BookmarkList";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -11,56 +9,48 @@ const { SubMenu } = Menu;
 // 3. Iterate through bookmarks
 // 4. Retrieve bookmark paper details in console.log()
 
-function Sidebar() {
-  const bookmarksByCases = useSelector((state) => state.bookmarksByCases);
-  //const dispatch = useDispatch();
+const mapStateToProps = (state) => ({
+  allCases: state.bookmarksByCase,
+}); // connect props to state store in Redux
 
-  return (
-    <Sider collapsible>
-      <Menu
-        theme="dark"
-        defaultSelectedKeys="miscExplanationHeader"
-        mode="inline"
-      >
-        <Menu.Item key="miscExplanationHeader">Bookmarked Papers</Menu.Item>
-        <SubMenu
-          key="case1"
-          title={
-            <span>
-              <span>Case 1</span>
-            </span>
-          }
-        >
-          <Menu.Item key="1">Bookmark 1</Menu.Item>
-          <Menu.Item key="2">Bookmark 2</Menu.Item>
-        </SubMenu>
-        {bookmarksByCases ? (
-          bookmarksByCases.map((result) => (
-            <SubMenu
-              key={result}
-              title={
-                <span>
-                  <span>{result}</span>
-                </span>
-              }
-            >
-              <Menu.Item key="1">Bookmark 1</Menu.Item>
-              <Menu.Item key="2">Bookmark 2</Menu.Item>
-            </SubMenu>
-          ))
-        ) : (
-          <SubMenu
-            key="no cases found"
-            title={
-              <span>
-                <span>"No cases found</span>
-              </span>
-            }
-          ></SubMenu>
-        )}
-      </Menu>
-    </Sider>
-  );
+class SidebarWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    const userCases = Object.keys(this.props.allCases);
+    return (
+      <div>
+        <Sider collapsible>
+          <Menu
+            theme="dark"
+            defaultSelectedKeys="miscExplanationHeader"
+            mode="inline"
+          >
+            {userCases
+              ? userCases.map((result) => (
+                  <SubMenu
+                    key={this.props.allCases[result].ID}
+                    title={
+                      <span>
+                        <span>{result}</span>
+                      </span>
+                    }
+                  >
+                    {this.props.allCases[result].bookmarks.map((bookmark) => (
+                      <Menu.Item key={bookmark.ID}>{bookmark.title}</Menu.Item>
+                    ))}
+                  </SubMenu>
+                ))
+              : null}
+          </Menu>
+        </Sider>
+      </div>
+    );
+  }
 }
 
-export default Sidebar;
+const Sidebar = connect(mapStateToProps)(SidebarWrapper); // connect to Redux state
+export default Sidebar; // this is the component that is used in App
