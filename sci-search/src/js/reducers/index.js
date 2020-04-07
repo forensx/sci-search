@@ -67,17 +67,17 @@ function papersByquery(state = {}, action) {
 // manage individual bookmark logic
 function bookmarks(
   state = {
-    papersBookmarked: [],
+    bookmarks: [],
   },
   action
 ) {
   switch (action.type) {
     case ADD_BOOKMARK:
-      console.log("Paper bookmarked from Redux: ", action.paper.paperID);
+      console.log("Paper bookmarked from Redux: ", action.paper.ID);
       return Object.assign({}, state, {
-        bookmarks: action.paper,
+        bookmarks: [...state.bookmarks, action.paper],
         lastUpdated: action.receivedAt,
-        ID: uuidv4(),
+        caseID: uuidv4(),
       });
     default:
       return state;
@@ -85,16 +85,15 @@ function bookmarks(
 }
 
 // handle state management of entire bookmarkByCase system
-function bookmarksByCase(state = [], action) {
+function bookmarksByCase(state = {}, action) {
   switch (action.type) {
-    case REMOVE_BOOKMARK:
     case ADD_BOOKMARK:
       return Object.assign({}, state, {
-        [action.caseName]: [
-          ...state[action.caseName],
-          bookmarks(state[action.caseName], action),
-        ],
+        [action.caseName]: bookmarks(state[action.caseName], action),
       });
+    case REMOVE_BOOKMARK:
+      console.log("Removed bookmark: ", action.paper.ID);
+      return state;
     default:
       return state;
   }
