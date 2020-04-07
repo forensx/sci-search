@@ -8,23 +8,44 @@ import Search from "./components/Search";
 import Sidebar from "./components/Sidebar";
 const { Header, Content } = Layout;
 
-export default function App() {
-  return (
-    <div className="App">
-      <Layout>
-        <Header style={{ color: "white", fontSize: "24px" }}>Sci-Search</Header>
-        <Layout style={{ minHeight: "93vh" }}>
-          <Sidebar />
-          <Content>
-            <div>
-              <Search />
-            </div>
-            <div>
-              <ResultList />
-            </div>
-          </Content>
+export default class App extends Component {
+  state = {
+    windowHeight: window.innerHeight,
+  };
+
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+
+  handleResize = (e) => {
+    console.log("Browser height is: ", window.innerHeight);
+    this.setState({ windowHeight: window.innerHeight });
+  };
+
+  render() {
+    return (
+      <div className="App container">
+        <Layout style={{ height: "100vh" }}>
+          <Header style={{ color: "white", fontSize: "24px", height: "7%" }}>
+            Sci-Search
+          </Header>
+          <Layout className="contentLayout">
+            <Sidebar className="sidebarPane" height={this.state.windowHeight} />
+            <Content className="contentPane">
+              <div>
+                <Search />
+              </div>
+              <div>
+                <ResultList />
+              </div>
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
-    </div>
-  );
+      </div>
+    );
+  }
 }

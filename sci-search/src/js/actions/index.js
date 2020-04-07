@@ -86,3 +86,22 @@ export function removeBookmark(paper, caseName) {
     receivedAt: Date.now()
   };
 }
+
+// CASE SYSTEM
+export const REMOVE_CASE = "REMOVE_CASE";
+export function removeCase(caseName) {
+  return {
+    type: REMOVE_CASE,
+    caseName,
+    receivedAt: Date.now()
+  };
+}
+
+export const ADD_CASE = "ADD_CASE";
+export function addCase(caseName) {
+  return {
+    type: ADD_CASE,
+    caseName,
+    receivedAt: Date.now()
+  };
+}

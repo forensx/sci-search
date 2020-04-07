@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { ExportOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import Cite from "citation-js";
@@ -8,8 +8,8 @@ import { useSelector } from "react-redux";
 
 function ExportCitations(caseNameProp, allCases) {
   if (caseNameProp) {
-    let curCase = caseNameProp; //Change this to be current case id
-    let myCase = allCases[curCase].bookmarks; //Change this to filter by id instead of case name
+    let curCase = caseNameProp;
+    let myCase = allCases[curCase].bookmarks;
     let DOIs = [];
     myCase.forEach((x) => DOIs.push(x.doi));
     console.log("all cases are", allCases);
@@ -23,7 +23,7 @@ function ExportCitations(caseNameProp, allCases) {
 
     return save(output, "example.txt");
   } else {
-    console.log("No cases yet");
+    message.error("No case selected! Select a case first.");
   }
 }
 
@@ -31,10 +31,10 @@ function CiteExport(props) {
   console.log(props.caseNameProp);
   const allCases = useSelector((state) => state.bookmarksByCase);
   return (
-    <div>
+    <div style={{ marignBottom: "10%" }}>
       <Button
         icon={<ExportOutlined />}
-        style={{ marginLeft: "2.5%", width: "95%" }}
+        style={{ marginLeft: "2.5%", width: "95%", marignBottom: "30%" }}
         onClick={(exports) => ExportCitations(props.caseNameProp, allCases)}
       >
         Export Citations

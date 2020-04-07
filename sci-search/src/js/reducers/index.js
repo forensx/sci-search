@@ -7,6 +7,8 @@ import {
   RECEIVE_PAPERS,
   ADD_BOOKMARK,
   REMOVE_BOOKMARK,
+  REMOVE_CASE,
+  ADD_CASE,
 } from "../actions";
 
 function selectedQuery(state = null, action) {
@@ -92,7 +94,11 @@ function bookmarksByCase(state = {}, action) {
         [action.caseName]: bookmarks(state[action.caseName], action),
       });
     case REMOVE_BOOKMARK:
-      console.log("Removed bookmark: ", action.paper.ID);
+      return state;
+    case REMOVE_CASE:
+      console.log("To be filtered: ", state);
+      return state.filter(caseName => caseName !== action.caseName);
+    case ADD_CASE:
       return state;
     default:
       return state;

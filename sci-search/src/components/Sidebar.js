@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Menu, message, Input, Card } from "antd";
+import { removeCase } from "../js/actions";
+import { Layout, Menu, message, Input, Card, Button } from "antd";
 import CiteExport from "./bookmarks/CiteExport";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
   allCases: state.bookmarksByCase,
+  height: ownProps.height,
 }); // connect props to state store in Redux
 class SidebarWrapper extends Component {
   constructor(props) {
@@ -17,16 +19,21 @@ class SidebarWrapper extends Component {
     this.setState({ caseRender: e.key, visible: true });
   };
 
+  handleRemoveCase = (e) => {
+    const { dispatch } = this.props;
+    dispatch(removeCase(e.key));
+  };
+
   render() {
     const userCases = Object.keys(this.props.allCases);
     return (
       <div>
-        <Sider collapsible width={400} style={{ background: "#002140" }}>
+        <Sider width={400} style={{ background: "#002140" }}>
           <Menu
             theme="dark"
             defaultSelectedKeys="miscExplanationHeader"
             mode="vertical"
-            style={{ background: "#002140", minHeight: "84vh" }}
+            style={{ background: "#002140", height: this.props.height * 0.895 }}
           >
             <SubMenu
               key="sub1"
@@ -36,7 +43,7 @@ class SidebarWrapper extends Component {
                   : "Choose a case"
               }
             >
-              <Menu.ItemGroup>
+              <Menu.ItemGroup style={{ width: "350px" }}>
                 {userCases
                   ? userCases.map((result) => (
                       <Menu.Item onClick={this.handleMenuClick} key={result}>
@@ -44,9 +51,6 @@ class SidebarWrapper extends Component {
                       </Menu.Item>
                     ))
                   : null}
-                <Menu.Item key="caseUserInput">
-                  <Input placeholder="Create new case" id="userNewCaseInput" />
-                </Menu.Item>
               </Menu.ItemGroup>
             </SubMenu>
             {this.state.caseRender
@@ -80,7 +84,10 @@ class SidebarWrapper extends Component {
                 )
               : null}
           </Menu>
-          <CiteExport caseNameProp={this.state.caseRender} />
+          <CiteExport
+            caseNameProp={this.state.caseRender}
+            style={{ position: "relative" }}
+          />
         </Sider>
       </div>
     );
