@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout, Menu } from "antd";
+import CiteExport from "./bookmarks/CiteExport";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -38,6 +39,7 @@ class SidebarWrapper extends Component {
                         <span>{result}</span>
                       </span>
                     }
+                    multiple={false}
                   >
                     {this.props.allCases[result].bookmarks.map((bookmark) => (
                       <Menu.Item key={bookmark.ID}>{bookmark.title}</Menu.Item>
@@ -46,6 +48,7 @@ class SidebarWrapper extends Component {
                 ))
               : null}
           </Menu>
+          <CiteExport/>
         </Sider>
       </div>
     );
