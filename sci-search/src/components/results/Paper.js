@@ -133,7 +133,7 @@ const abstractStyle = {
 };
 
 const paperStyle = {
-  backgroundColor: "#f5f5f5",
+  backgroundColor: "#f0f2f5",
   padding: "0.5% 5% 0.5% 2%",
 };
 

@@ -85,7 +85,7 @@ export default class App extends Component {
                   padding: 24,
                   margin: 0,
                   minHeight: 280,
-                  marginTop: 24,
+                  background: "#f0f2f5"
                 }}
               >
                 <Search />
