@@ -67,10 +67,10 @@ export function fetchPapersIfNeeded(query) {
 // END SEARCH SYSTEM
 
 // BOOKMARKS SYSTEM
-export const ADD_BOOKMARK_NEW_CASE = "ADD_BOOKMARK_NEW_CASE";
-export function addBookmark_newCase(paper, caseName) {
+export const ADD_BOOKMARK = "ADD_BOOKMARK";
+export function addBookmark(paper, caseName) {
   return {
-    type: ADD_BOOKMARK_NEW_CASE,
+    type: ADD_BOOKMARK,
     paper,
     caseName,
     receivedAt: Date.now()

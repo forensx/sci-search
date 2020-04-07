@@ -3,22 +3,26 @@ import PropTypes from "prop-types";
 import { PageHeader, Button, Descriptions } from "antd";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { addBookmark_newCase, removeBookmark } from "../../js/actions";
+import { addBookmark, removeBookmark } from "../../js/actions";
 import Abstract from "./PaperComponents/Abstract";
 import Journal from "./PaperComponents/Journal";
 import Keywords from "./PaperComponents/Keywords";
 import Genes from "./PaperComponents/Genes";
 import PaperDate from "./PaperComponents/PaperDate";
 import PPIndex from "./PaperComponents/PPIndex";
-import BookmarkSelector from './PaperComponents/BookmarkSelector'
+import BookmarkSelector from "./PaperComponents/BookmarkSelector";
 
 export default function Paper(props) {
   const [bookmarked, setBookmarked] = useState(false);
 
   const dispatch = useDispatch();
-  const onBookmark = paperID => {
-    console.log("PAPER BOOKMARK ID FROM COMPONENT: ", paperID);
-    dispatch(addBookmark_newCase(paperID, "BRCA SEARCH"));
+  const addBookmarkHandler = (paper) => {
+    console.log("PAPER BOOKMARK ID FROM COMPONENT: ", paper);
+    dispatch(addBookmark(paper, "BRCA SEARCH"));
+  };
+  const removeBookmarkHandler = (paper) => {
+    console.log("PAPER BOOKMARK ID REMOVED", paper);
+    dispatch(removeBookmark(paper, "BRCA SEARCH"));
   };
 
   return (
@@ -39,7 +43,7 @@ export default function Paper(props) {
               <Button
                 type="link"
                 onClick={(event) => {
-                  onBookmark(props.result);
+                  removeBookmarkHandler(props.result);
                   setBookmarked(false);
                 }}
               >
@@ -49,7 +53,7 @@ export default function Paper(props) {
               <Button
                 type="link"
                 onClick={(event) => {
-                  onBookmark(props.result);
+                  addBookmarkHandler(props.result);
                   setBookmarked(true);
                 }}
               >
@@ -112,7 +116,7 @@ export default function Paper(props) {
             <PPIndex ppindex={props.result.ppindex.toFixed(3)} />
           </Descriptions.Item>
           <Descriptions.Item label="Bookmark this Paper">
-            <BookmarkSelector />
+            <BookmarkSelector paper={props.result} />
           </Descriptions.Item>
         </Descriptions>
       </PageHeader>
