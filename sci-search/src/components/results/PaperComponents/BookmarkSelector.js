@@ -29,7 +29,7 @@ class BookmarkSelectorWrapper extends Component {
       // second parameter is second delay for popup message
       message.success("Paper bookmarked to " + e.key + "!", 1);
       dispatch(addBookmark(paper, e.key));
-      this.setState({ visible: true });
+      this.setState({ visible: false });
     }
   };
 
