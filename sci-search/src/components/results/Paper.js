@@ -39,27 +39,6 @@ export default function Paper(props) {
             >
               {props.result.title}
             </a>
-            {bookmarked ? (
-              <Button
-                type="link"
-                onClick={(event) => {
-                  removeBookmarkHandler(props.result);
-                  setBookmarked(false);
-                }}
-              >
-                <StarFilled />
-              </Button>
-            ) : (
-              <Button
-                type="link"
-                onClick={(event) => {
-                  addBookmarkHandler(props.result);
-                  setBookmarked(true);
-                }}
-              >
-                <StarOutlined />
-              </Button>
-            )}
           </React.Fragment>
         }
         subTitle={props.result.authors
