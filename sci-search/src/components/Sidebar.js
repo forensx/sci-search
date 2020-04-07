@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout, Menu, message, Input, Card } from "antd";
+import CiteExport from "./bookmarks/CiteExport";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -30,6 +31,10 @@ class SidebarWrapper extends Component {
       this.setState({ caseRender: e.key, visible: false });
       console.log("User clicked: ", e.key);
     }
+  };
+
+  handleVisibleChange = (flag) => {
+    this.setState({ visible: flag });
   };
 
   handleNewUserCase = (e) => {
