@@ -48,14 +48,11 @@ class SidebarWrapper extends Component {
     const userCases = Object.keys(this.props.allCases);
     return (
       <div>
-        <Sider collapsible width={400} style={{ background: "#002140" }}>
+        <Sider width={400} >
           <Menu
             theme="dark"
             defaultSelectedKeys="miscExplanationHeader"
             mode="vertical"
-            style={{ background: "#002140", minHeight: "84vh" }}
-            onClick={this.handleMenuClick}
-            visible={this.state.visible}
           >
             <SubMenu
               key="chooseCaseHeader"
