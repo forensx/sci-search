@@ -77,7 +77,7 @@ export default function Paper(props) {
           </Button>,
         ]}
       >
-        <Descriptions size="default">
+        <Descriptions column={6} size="default">
           <Descriptions.Item
             span={6}
             bordered={true}

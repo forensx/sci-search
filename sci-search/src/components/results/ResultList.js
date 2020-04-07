@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Result } from "antd";
 import { Spin } from "antd";
@@ -43,7 +42,6 @@ class ResultListWrapper extends Component {
       let paperList = this.props.searchResults[this.props.currentSearch][
         "papers"
       ].sort((a, b) => (a.ppindex > b.ppindex ? -1 : 1));
-      console.log("Sorted papers: ", paperList);
       return paperList.map((result) => (
         <Paper result={result} key={result.ID} />
       ));

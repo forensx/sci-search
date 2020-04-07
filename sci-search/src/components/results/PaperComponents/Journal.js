@@ -1,5 +1,4 @@
 import React from "react";
-import { Descriptions } from "antd";
 
 function journalCapitalizationCase(journalName) {
     var splitStr = journalName.toLowerCase().split(" ");
