@@ -13,7 +13,7 @@ export default function App() {
     <div className="App">
       <Layout>
         <Header style={{ color: "white", fontSize: "24px" }}>Sci-Search</Header>
-        <Layout style={{ minHeight: "90vh" }}>
+        <Layout style={{ minHeight: "93vh" }}>
           <Sidebar />
           <Content>
             <div>

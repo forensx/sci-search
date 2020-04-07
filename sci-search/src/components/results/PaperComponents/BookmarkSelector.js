@@ -27,7 +27,7 @@ class BookmarkSelectorWrapper extends Component {
       this.setState({ visible: true });
     } else {
       // second parameter is second delay for popup message
-      message.success('Paper bookmarked to ' + e.key + "!", 1);
+      message.success("Paper bookmarked to " + e.key + "!", 1);
       dispatch(addBookmark(paper, e.key));
       this.setState({ visible: true });
     }
@@ -40,7 +40,7 @@ class BookmarkSelectorWrapper extends Component {
   handleNewUserCase = (e) => {
     const { dispatch, paper } = this.props;
     if (e.key === "Enter") {
-      message.success('Paper bookmarked to ' + e.target.value + "!", 1);
+      message.success("Paper bookmarked to " + e.target.value + "!", 1);
       dispatch(addBookmark(paper, e.target.value));
     }
   };
