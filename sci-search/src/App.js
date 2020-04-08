@@ -2,82 +2,40 @@ import React, { Component } from "react";
 import { Layout, Menu } from "antd";
 import Search from "./components/Search";
 import ResultList from "./components/results/ResultList";
-import {
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-} from "@ant-design/icons";
 import "antd/dist/antd.css";
 import "./App.css";
+import Sidebar from "./components/Sidebar";
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Header, Content } = Layout;
 
 export default class App extends Component {
+  state = {
+    currentView: "search",
+  };
+  handleNavRender(e) {
+    console.log("click ", e);
+    this.setState({ currentView: e.key });
+  }
+
   render() {
     return (
       <div>
         <Layout style={{ height: "100vh" }}>
           <Header className="header">
             <div className="logo" />
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-              <Menu.Item key="1">nav 1</Menu.Item>
-              <Menu.Item key="2">nav 2</Menu.Item>
-              <Menu.Item key="3">nav 3</Menu.Item>
+            <Menu
+              theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={[this.state.current]}
+              onClick={this.handleNavRender}
+              selectedKeys={[this.state.current]}
+            >
+              <Menu.Item key="search">Search</Menu.Item>
+              <Menu.Item key="bookmarksView">Bookmarks</Menu.Item>
             </Menu>
           </Header>
           <Layout>
-            <Sider width={200} className="site-layout-background">
-              <Menu
-                mode="inline"
-                defaultSelectedKeys={["1"]}
-                defaultOpenKeys={["sub1"]}
-                style={{ height: "100%", borderRight: 0 }}
-              >
-                <SubMenu
-                  key="sub1"
-                  title={
-                    <span>
-                      <UserOutlined />
-                      subnav 1
-                    </span>
-                  }
-                >
-                  <Menu.Item key="1">option1</Menu.Item>
-                  <Menu.Item key="2">option2</Menu.Item>
-                  <Menu.Item key="3">option3</Menu.Item>
-                  <Menu.Item key="4">option4</Menu.Item>
-                </SubMenu>
-                <SubMenu
-                  key="sub2"
-                  title={
-                    <span>
-                      <LaptopOutlined />
-                      subnav 2
-                    </span>
-                  }
-                >
-                  <Menu.Item key="5">option5</Menu.Item>
-                  <Menu.Item key="6">option6</Menu.Item>
-                  <Menu.Item key="7">option7</Menu.Item>
-                  <Menu.Item key="8">option8</Menu.Item>
-                </SubMenu>
-                <SubMenu
-                  key="sub3"
-                  title={
-                    <span>
-                      <NotificationOutlined />
-                      subnav 3
-                    </span>
-                  }
-                >
-                  <Menu.Item key="9">option9</Menu.Item>
-                  <Menu.Item key="10">option10</Menu.Item>
-                  <Menu.Item key="11">option11</Menu.Item>
-                  <Menu.Item key="12">option12</Menu.Item>
-                </SubMenu>
-              </Menu>
-            </Sider>
+            <Sidebar />
             <Layout style={{ padding: "0 24px 24px" }}>
               <Content
                 className="site-layout-background"
@@ -85,7 +43,7 @@ export default class App extends Component {
                   padding: 24,
                   margin: 0,
                   minHeight: 280,
-                  background: "#f0f2f5"
+                  background: "#f0f2f5",
                 }}
               >
                 <Search />
