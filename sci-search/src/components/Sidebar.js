@@ -48,84 +48,88 @@ class SidebarWrapper extends Component {
   render() {
     const userCases = Object.keys(this.props.allCases);
     return (
-      <div style = {{display: "flex", flexDirection: "column", background: "#FFF"}}>
-      <Sider
-        width={350}
-        className="site-layout-background"
-        style={{ position: "relative", display: "flex", flexDirection: "column" }}
+      <div
+        style={{ display: "flex", flexDirection: "column", background: "#FFF" }}
       >
-        <Menu
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
-          style={{ borderRight: 0 }}
-          mode="vertical"
+        <Sider
+          width={350}
+          className="site-layout-background"
+          style={{
+            position: "relative",
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
-          <SubMenu
-            key="chooseCaseSidebar"
-            title={
-              this.state.caseRender
-                ? "Viewing: " + this.state.caseRender
-                : "Choose a case"
-            }
+          <Menu
+            defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["sub1"]}
+            style={{ borderRight: 0 }}
+            mode="vertical"
           >
-            <Menu.ItemGroup>
-              {userCases
-                ? userCases.map((result) => (
-                    <Menu.Item onClick={this.handleMenuClick} key={result}>
-                      {result}
-                    </Menu.Item>
-                  ))
-                : null}
-              <Menu.Item onClick={this.showModal} key="createNewCase">
-                Create a new case
-              </Menu.Item>
-              <Modal
-                title="Basic Modal"
-                visible={this.state.modalVisible}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
-              >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-              </Modal>
-            </Menu.ItemGroup>
-          </SubMenu>
-          {this.state.caseRender
-            ? this.props.allCases[this.state.caseRender].bookmarks.map(
-                (bookmark) => (
-                  <Card
-                    size="small"
-                    title={bookmark.title.replace(
-                      /(([^\s]+\s\s*){5})(.*)/,
-                      "$1…"
-                    )}
-                    extra={
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={bookmark.url}
-                      >
-                        Paper link
-                      </a>
-                    }
-                    style={{ marginTop: "2px" }}
-                  >
-                    <p>
-                      {bookmark.abstract.replace(
-                        /(([^\s]+\s\s*){20})(.*)/,
+            <SubMenu
+              key="chooseCaseSidebar"
+              title={
+                this.state.caseRender
+                  ? "Viewing: " + this.state.caseRender
+                  : "Choose a case"
+              }
+            >
+              <Menu.ItemGroup>
+                {userCases
+                  ? userCases.map((result) => (
+                      <Menu.Item onClick={this.handleMenuClick} key={result}>
+                        {result}
+                      </Menu.Item>
+                    ))
+                  : null}
+                <Menu.Item onClick={this.showModal} key="createNewCase">
+                  Create a new case
+                </Menu.Item>
+                <Modal
+                  title="Basic Modal"
+                  visible={this.state.modalVisible}
+                  onOk={this.handleOk}
+                  onCancel={this.handleCancel}
+                >
+                  <p>Some contents...</p>
+                  <p>Some contents...</p>
+                  <p>Some contents...</p>
+                </Modal>
+              </Menu.ItemGroup>
+            </SubMenu>
+            {this.state.caseRender
+              ? this.props.allCases[this.state.caseRender].bookmarks.map(
+                  (bookmark) => (
+                    <Card
+                      size="small"
+                      title={bookmark.title.replace(
+                        /(([^\s]+\s\s*){5})(.*)/,
                         "$1…"
                       )}
-                    </p>
-                  </Card>
+                      extra={
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={bookmark.url}
+                        >
+                          Paper link
+                        </a>
+                      }
+                      style={{ marginTop: "2px" }}
+                    >
+                      <p>
+                        {bookmark.abstract.replace(
+                          /(([^\s]+\s\s*){20})(.*)/,
+                          "$1…"
+                        )}
+                      </p>
+                    </Card>
+                  )
                 )
-              )
-            : null}
-        </Menu>
-      </Sider>
-      <CiteExport
-      caseNameProp={this.state.caseRender}
-      />
+              : null}
+          </Menu>
+        </Sider>
+        <CiteExport caseNameProp={this.state.caseRender} />
       </div>
     );
   }
