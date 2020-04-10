@@ -48,16 +48,16 @@ class SidebarWrapper extends Component {
   render() {
     const userCases = Object.keys(this.props.allCases);
     return (
+      <div style = {{display: "flex", flexDirection: "column", background: "#FFF"}}>
       <Sider
         width={350}
         className="site-layout-background"
         style={{ position: "relative", display: "flex", flexDirection: "column" }}
-        
       >
         <Menu
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["sub1"]}
-          style={{ height: "100%", borderRight: 0 }}
+          style={{ borderRight: 0 }}
           mode="vertical"
         >
           <SubMenu
@@ -121,11 +121,12 @@ class SidebarWrapper extends Component {
                 )
               )
             : null}
-          <CiteExport
-            caseNameProp={this.state.caseRender}
-          />
         </Menu>
       </Sider>
+      <CiteExport
+      caseNameProp={this.state.caseRender}
+      />
+      </div>
     );
   }
 }

@@ -30,7 +30,7 @@ function CiteExport(props) {
   console.log(props.caseNameProp);
   const allCases = useSelector((state) => state.bookmarksByCase);
   return (
-    <div style={{ position: "absolute", bottom: "0"}}>
+    <div style={{ marginTop: "auto"}}>
       <Button
         icon={<ExportOutlined />}
         style={{ marginLeft: "15px", width: "320px", marignBottom: "30%" }}
