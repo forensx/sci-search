@@ -51,7 +51,8 @@ class SidebarWrapper extends Component {
       <Sider
         width={350}
         className="site-layout-background"
-        style={{ position: "relative" }}
+        style={{ position: "relative", display: "flex", flexDirection: "column" }}
+        
       >
         <Menu
           defaultSelectedKeys={["1"]}
@@ -122,7 +123,6 @@ class SidebarWrapper extends Component {
             : null}
           <CiteExport
             caseNameProp={this.state.caseRender}
-            style={{ position: "absolute", bottom: 0 }}
           />
         </Menu>
       </Sider>

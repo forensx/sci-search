@@ -30,10 +30,10 @@ function CiteExport(props) {
   console.log(props.caseNameProp);
   const allCases = useSelector((state) => state.bookmarksByCase);
   return (
-    <div style={{ marignBottom: "10%" }}>
+    <div style={{ position: "absolute", bottom: "0"}}>
       <Button
         icon={<ExportOutlined />}
-        style={{ marginLeft: "2.5%", width: "95%", marignBottom: "30%" }}
+        style={{ marginLeft: "15px", width: "320px", marignBottom: "30%" }}
         onClick={(exports) => ExportCitations(props.caseNameProp, allCases)}
       >
         Export Citations

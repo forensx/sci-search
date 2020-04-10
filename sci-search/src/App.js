@@ -21,7 +21,7 @@ export default class App extends Component {
     return (
       <div>
         <Layout style={{ height: "100vh" }}>
-          <Header className="header">
+          <Header className="header" style={{display: 'flex', justifyContent: 'space-between'}}>
             <div className="logo" />
             <Menu
               theme="dark"
@@ -29,6 +29,7 @@ export default class App extends Component {
               defaultSelectedKeys={[this.state.current]}
               onClick={this.handleNavRender}
               selectedKeys={[this.state.current]}
+              style={{float: 'right'}}
             >
               <Menu.Item key="search">Search</Menu.Item>
               <Menu.Item key="bookmarksView">Bookmarks</Menu.Item>
