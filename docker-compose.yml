@@ -1,0 +1,30 @@
+version: "3.5"
+
+services:
+  flask-api:
+    container_name: flask_api
+    restart: always
+    build:
+      context: ./api/
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    volumes:
+      - ./api:/usr/src/app
+
+  client:
+    container_name: react_scisearch
+    build:
+      context: ./sci-search
+      dockerfile: Dockerfile
+    volumes:
+      - "./sci-search:/usr/src/app"
+      - "/usr/src/app/node_modules"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "flask-api"
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - HOST_URL=http://192.168.99.100:5000
