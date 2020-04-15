@@ -28,67 +28,80 @@ async def biorxiv(query, number):
         'page_size': number
     }
 
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(base, params = SEARCH_PARAMS, headers = headers) as resp:
-                data = await resp.json()
-                ids = []
-                for paper in data['results']:
-                    ids.append(paper['id'])
+    #try:
+    async with aiohttp.ClientSession() as session:
+        async with session.get(base, params = SEARCH_PARAMS, headers = headers) as resp:
+            data = await resp.json()
 
-                for article in ids:
-                    detail = await fetch_papers(article)
+            '''
+            if not data['results']:
+                final_noresult = [{
+                    'database': 'bioRxiv',
+                    'error': 'No results found'
+                }]
+                return final_noresult
+            '''
 
-                    try:
-                        doi = detail['publication']['doi']
-                    except:
-                        doi = detail['doi']
+            ids = []
+            for paper in data['results']:
+                ids.append(paper['id'])
+            
 
-                    try:
-                        journal = detail['publication']['journal']
-                    except:
-                        journal = None
+            for article in ids:
+                detail = await fetch_papers(article)
 
-                    url = detail['biorxiv_url']
-                    title = detail['title']
+                try:
+                    doi = detail['publication']['doi']
+                except:
+                    doi = detail['doi']
 
-                    abstract = detail['abstract']
+                try:
+                    journal = detail['publication']['journal']
+                except:
+                    journal = None
 
+                url = detail['biorxiv_url']
+                title = detail['title']
 
-                    keywords = await find_keywords(abstract)
-                    genes, variants = await find_genes(abstract)
-                    gdc, pfc = await find_gdcpfc(abstract, genes, variants)
-                    
-                    date = detail['first_posted']
-                    pubDate = datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d %H:%M:%S')
-
-                    authors = []
-                    for author in detail['authors']:
-                        authors.append(author['name'])
-
-                    result = {
-                        'title': title,
-                        'url': url,
-                        'pubDate': pubDate,
-                        'journal': journal,
-                        'abstract': abstract,
-                        'authors': authors,
-                        'database': 'bioRxiv', 
-                        'doi': doi,
-                        'paperType': None,
-                        'keywords': keywords,
-                        'gdc': gdc,
-                        'pfc': pfc,
-                        'genes': genes,
-                        'variants': variants
-                    }
-                    results.append(result)
+                abstract = detail['abstract']
 
 
-                return results
+                keywords = await find_keywords(abstract)
+                genes, variants = await find_genes(abstract)
+                gdc, pfc = await find_gdcpfc(abstract, genes, variants)
+                
+                date = detail['first_posted']
+                pubDate = datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d %H:%M:%S')
+
+                authors = []
+                for author in detail['authors']:
+                    authors.append(author['name'])
+
+                result = {
+                    'title': title,
+                    'url': url,
+                    'pubDate': pubDate,
+                    'journal': journal,
+                    'abstract': abstract,
+                    'authors': authors,
+                    'database': 'bioRxiv', 
+                    'doi': doi,
+                    'paperType': None,
+                    'keywords': keywords,
+                    'gdc': gdc,
+                    'pfc': pfc,
+                    'genes': genes,
+                    'variants': variants
+                }
+                results.append(result)
+
+
+            return results
+    '''
     except:
         final_noresult = [{
                 'database': 'bioRxiv',
                 'error': 'No results found'
             }]
         return final_noresult
+    '''

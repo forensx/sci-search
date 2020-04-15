@@ -46,13 +46,17 @@ async def pubmed(query, number):
             data = await resp.json()
             
             id_list = data['esearchresult']['idlist']
+
+            '''
             if len(id_list) == 0:
                 final_noresult = [{
                         'database': 'PubMed',
                         'error': 'No results found'
                     }]
                 return final_noresult
-            elif len(id_list) > 1:
+            '''
+            #el
+            if len(id_list) > 1:
                 id_list = ','.join(id_list)
             else:
                 id_list = id_list[0]
