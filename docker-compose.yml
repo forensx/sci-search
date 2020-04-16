@@ -17,8 +17,8 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     environment:
-    - PGADMIN_DEFAULT_EMAIL=postgres
-    - PGADMIN_DEFAULT_PASSWORD=postgres
+    - PGADMIN_DEFAULT_EMAIL=forensx
+    - PGADMIN_DEFAULT_PASSWORD=forensx
     ports:
       - "8080:80"
     depends_on: 
