@@ -115,7 +115,6 @@ class SidebarWrapper extends Component {
                           Paper link
                         </a>
                       }
-                      style={{ marginTop: "2px" }}
                     >
                       <p>
                         {bookmark.abstract.replace(
